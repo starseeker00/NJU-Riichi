@@ -1,12 +1,16 @@
 {
+  "name": "nju-riichi",
+  "version": "0.1.0",
+  "homepage": "https://starseeker00.github.io/NJU-Riichi",
   "private": true,
-  "author": "starseeker <191250007@smail.nju.edu.cn>",
   "scripts": {
     "dev": "umi dev",
     "build": "umi build",
     "postinstall": "umi setup",
     "setup": "umi setup",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "antd": "^5.19.1",
@@ -15,6 +19,7 @@
   "devDependencies": {
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
+    "gh-pages": "^6.1.1",
     "typescript": "^5.0.3"
   }
 }

@@ -1,21 +1,52 @@
-import { Link, Outlet } from 'umi';
-import styles from './index.less';
+import React from 'react';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
 
-export default function Layout() {
+const { Header, Content, Footer } = Layout;
+
+const items = new Array(5).fill(null).map((_, index) => ({
+  key: index + 1,
+  label: `nav ${index + 1}`,
+}));
+
+const App: React.FC = () => {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
   return (
-    <div className={styles.navs}>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/docs">Docs</Link>
-        </li>
-        <li>
-          <a href="https://github.com/umijs/umi">Github</a>
-        </li>
-      </ul>
-      <Outlet />
-    </div>
+    <Layout>
+      <Header style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="demo-logo" />
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={['2']}
+          items={items}
+          style={{ flex: 1, minWidth: 0 }}
+        />
+      </Header>
+      <Content style={{ padding: '0 48px' }}>
+        <Breadcrumb style={{ margin: '16px 0' }}>
+          <Breadcrumb.Item>Home</Breadcrumb.Item>
+          <Breadcrumb.Item>List</Breadcrumb.Item>
+          <Breadcrumb.Item>App</Breadcrumb.Item>
+        </Breadcrumb>
+        <div
+          style={{
+            background: colorBgContainer,
+            minHeight: 280,
+            padding: 24,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          Content
+        </div>
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>
+        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+      </Footer>
+    </Layout>
   );
-}
+};
+
+export default App;
