@@ -7,3 +7,7 @@
 /src/.umi-test
 /dist
 .swc
+
+/lib/env.js
+/lib/proto
+/lib/data
