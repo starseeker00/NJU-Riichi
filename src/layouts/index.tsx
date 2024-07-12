@@ -1,27 +1,32 @@
 import React from 'react';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Layout as Lyt, Menu, theme } from 'antd';
+import { Outlet, useNavigate } from 'umi';
+import routes from '../../config/routes';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content, Footer } = Lyt;
 
-const items = new Array(5).fill(null).map((_, index) => ({
-  key: index + 1,
-  label: `nav ${index + 1}`,
-}));
-
-const App: React.FC = () => {
+const Layout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const navigate = useNavigate();
+
   return (
-    <Layout>
+    <Lyt>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div className="demo-logo" />
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
-          items={items}
+          defaultSelectedKeys={['/' + window.location.pathname.split('/').at(-1)]}
+          onSelect={({ key }) => { navigate(key) }}
+          items={
+            routes.map((route) => ({
+              key: route.path,
+              label: route.name,
+            }))
+          }
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>
@@ -39,14 +44,14 @@ const App: React.FC = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          Content
+          <Outlet />
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
         Ant Design ©{new Date().getFullYear()} Created by Ant UED
       </Footer>
-    </Layout>
+    </Lyt>
   );
 };
 
-export default App;
+export default Layout;
