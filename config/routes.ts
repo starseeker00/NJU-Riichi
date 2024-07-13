@@ -13,6 +13,11 @@ const routes = [
         path: "/events",
         component: "Events"
     },
+    {
+        name: '更新日志',
+        path: "/changelog",
+        component: "Changelog"
+    }
 ]
 
 export default routes;
