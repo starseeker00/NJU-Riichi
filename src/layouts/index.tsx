@@ -1,7 +1,8 @@
 import React from 'react';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, FloatButton, Layout, Menu, theme } from 'antd';
 import { Link, Outlet, useLocation, useNavigate } from 'umi';
 import routes from '../../config/routes';
+import './index.less';
 
 const { Header, Content, Footer } = Layout;
 
@@ -47,6 +48,7 @@ const AppLayout: React.FC = () => {
         >
           <Outlet />
         </div>
+        <FloatButton.BackTop visibilityHeight={200} />
       </Content>
       <Footer style={{ textAlign: 'center' }}>
         Ant Design ©{new Date().getFullYear()} Created by Ant UED
