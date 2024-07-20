@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb, FloatButton, Layout, Menu, theme } from 'antd';
+import { FloatButton, Layout, Menu, theme } from 'antd';
 import { Link, Outlet, useLocation, useNavigate } from 'umi';
 import routes from '../../config/routes';
 import './index.less';
@@ -21,23 +21,18 @@ const AppLayout: React.FC = () => {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={[location.pathname]}
+          selectedKeys={[location.pathname.split('/')[1] || 'home']}
           items={
-            routes.filter(route => route.component)
+            routes.filter(route => route.title)
               .map((route) => ({
-                key: route.path,
-                label: <Link to={route.path}>{route.name}</Link>,
+                key: route.path.slice(1),
+                label: <Link to={route.path}>{route.title}</Link>,
               }))
           }
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>
-      <Content style={{ padding: '0 48px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
+      <Content style={{ marginTop: 32, padding: '0 48px' }}>
         <div
           style={{
             background: colorBgContainer,

@@ -4,19 +4,33 @@ const routes = [
         redirect: "/home"
     },
     {
-        name: '首页',
+        title: '首页',
         path: "/home",
         component: "Home"
     },
     {
-        name: '赛事',
+        title: '赛事',
         path: "/events",
-        component: "Events"
+        component: "Events",
+        routes: [
+            {
+                path: "/events/:id/players",
+                component: "Events/PlayerStatistics"
+            },
+            {
+                path: "/events/:id/records",
+                component: "Events/GameRecords"
+            }
+        ]
     },
     {
-        name: '更新日志',
+        title: '更新日志',
         path: "/changelog",
         component: "Changelog"
+    },
+    {
+        path: "*",
+        component: "404"
     }
 ]
 
