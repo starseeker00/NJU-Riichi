@@ -1,13 +1,17 @@
 import axios from 'axios';
 
-export function getEvents() {
-    return axios.get('/api/events/');
+export function getContests() {
+    return axios.get('/api/getContestList');
 }
 
-export function getPlayers(eventId: number) {
-    return axios.get(`/api/events/${eventId}/players`);
+export function getContestPlayers(contestId: number) {
+    return axios.get(`/api/getContestPlayerList?contestId=${contestId}`);
 }
 
-export function getRecords(eventId: number) {
-    return axios.get(`/api/events/${eventId}/records`);
+export function getContestRecords(contestId: number, pageIndex: number, pageSize: number) {
+    return axios.get(`/api/getGameRecordListByPage?contestId=${contestId}&pageIndex=${pageIndex}&pageSize=${pageSize}`);
+}
+
+export function getRecordDetail(uuid: string) {
+    return axios.get(`/api/getGameRecordDetail?uuid=${uuid}`);
 }

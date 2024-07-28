@@ -8,6 +8,6 @@
 /dist
 .swc
 
-/lib/env.js
-/lib/proto
-/lib/data
+/lib
+
+.VSCodeCounter/

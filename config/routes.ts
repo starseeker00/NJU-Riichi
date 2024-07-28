@@ -6,27 +6,35 @@ const routes = [
     {
         title: '首页',
         path: "/home",
-        component: "Home"
+        component: "Home",
+        nav: true,
     },
     {
         title: '赛事',
-        path: "/events",
-        component: "Events",
+        path: "/contests",
+        component: "Contests",
+        nav: true,
         routes: [
             {
-                path: "/events/:id/players",
-                component: "Events/PlayerStatistics"
+                path: "/contests/:id/players",
+                component: "Contests/PlayerStatistics"
             },
             {
-                path: "/events/:id/records",
-                component: "Events/GameRecords"
+                path: "/contests/:id/records",
+                component: "Contests/GameRecords"
             }
         ]
     },
     {
+        title: '牌谱详情',
+        path: "/records/:uuid",
+        component: "RecordDetail"
+    },
+    {
         title: '更新日志',
         path: "/changelog",
-        component: "Changelog"
+        component: "Changelog",
+        nav: true,
     },
     {
         path: "*",

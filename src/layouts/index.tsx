@@ -23,7 +23,7 @@ const AppLayout: React.FC = () => {
           mode="horizontal"
           selectedKeys={[location.pathname.split('/')[1] || 'home']}
           items={
-            routes.filter(route => route.title)
+            routes.filter(route => route.nav)
               .map((route) => ({
                 key: route.path.slice(1),
                 label: <Link to={route.path}>{route.title}</Link>,
