@@ -1,0 +1,16 @@
+name = "nju-riichi"
+compatibility_date = "2024-07-27"
+# main = "public/_worker.js"
+pages_build_output_dir = "./dist"
+
+# [[kv_namespaces]]
+# binding = "KV"
+# id = "<NAMESPACE_ID>"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "majsoul"
+database_id = "a72efb8c-5002-4ca9-b6f6-6f096570d114"
+
+# [vars]
+# API_KEY = "1234567asdf"

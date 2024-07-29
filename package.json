@@ -9,23 +9,27 @@
     "postinstall": "umi setup",
     "setup": "umi setup",
     "start": "npm run dev",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "server": "wrangler dev",
+    "d1:local": "wrangler d1 execute majsoul --local",
+    "d1:remote": "wrangler d1 execute majsoul --remote",
+    "predeploy": "npm run build && wrangler pages dev",
+    "deploy": "npm run build && wrangler pages deploy"
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
     "antd": "^5.19.1",
     "axios": "^1.7.2",
     "echarts": "^5.5.1",
-    "protobufjs": "^7.3.2",
-    "request-promise": "^4.2.6",
-    "umi": "^4.3.1",
-    "ws": "^8.18.0"
+    "umi": "^4.3.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "gh-pages": "^6.1.1",
-    "typescript": "^5.0.3"
+    "protobufjs": "^7.3.2",
+    "request-promise": "^4.2.6",
+    "typescript": "^5.0.3",
+    "wrangler": "^3.67.1",
+    "ws": "^8.18.0"
   }
 }

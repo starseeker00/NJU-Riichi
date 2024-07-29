@@ -17,10 +17,10 @@ export default {
 					break;
 				}
 				case '/api/getGameRecordListByPage': {
-					const pageIndex = Number(searchParams.get('pageIndex') || 1);
-					const pageSize = Number(searchParams.get('pageSize') || 10);
+					// const pageIndex = Number(searchParams.get('pageIndex') || 1);
+					// const pageSize = Number(searchParams.get('pageSize') || 10);
 					const contestId = Number(searchParams.get('contestId') || 1);
-					data = await getGameRecordListByPage(db, pageIndex, pageSize, contestId);
+					data = await getGameRecordListByPage(db, contestId);
 					break;
 				}
 				case '/api/getGameRecordDetail': {
@@ -63,7 +63,7 @@ async function getLatestRecordTime(db, contestId) {
 	return records?.latest_time || 0;
 }
 
-async function getGameRecordListByPage(db, pageIndex, pageSize, contestId) {
+async function getGameRecordListByPage(db, contestId) {
 	const records = await db.prepare("\
 SELECT * \
 FROM GameRecords, \
@@ -82,9 +82,8 @@ FROM GameRecords, \
  GROUP BY uuid \
 ) as rd \
 WHERE GameRecords.uuid=rd.uuid AND GameRecords.contest_id = ? \
-LIMIT ? OFFSET ? \
 ")
-		.bind(contestId, pageSize, (pageIndex - 1) * pageSize)
+		.bind(contestId)
 		.all();
 	return records.results;
 }

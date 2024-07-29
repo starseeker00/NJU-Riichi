@@ -27,11 +27,11 @@ const GameRecords = () => {
     const [mode, setMode] = useState<'seat' | 'rank'>('seat');
 
     const params = useParams<{ id: string }>();
-    const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    // const [pageIndex, setPageIndex] = useState(1);
+    // const [pageSize, setPageSize] = useState(10);
 
     useEffect(() => {
-        getContestRecords(Number(params.id), pageIndex, pageSize).then(res => {
+        getContestRecords(Number(params.id)).then(res => {
             const records = res.data.map((record: any) => {
                 return {
                     ...record,
@@ -41,7 +41,7 @@ const GameRecords = () => {
             })
             setData(records);
         })
-    }, [params.id, pageIndex, pageSize]);
+    }, [params.id]);
 
     const columns = [
         {
@@ -119,15 +119,15 @@ const GameRecords = () => {
             <Table
                 dataSource={data.map(transformRecord)}
                 columns={columns}
-                pagination={{
-                    current: pageIndex,
-                    pageSize: pageSize,
-                    total: data.length,
-                    onChange: (page, pageSize) => {
-                        setPageIndex(page);
-                        setPageSize(pageSize);
-                    }
-                }}
+            // pagination={{
+            //     current: pageIndex,
+            //     pageSize: pageSize,
+            //     total: data.length, // wrong total, need backend support
+            //     onChange: (page, pageSize) => {
+            //         setPageIndex(page);
+            //         setPageSize(pageSize);
+            //     }
+            // }}
             />
         </Spin>
     )

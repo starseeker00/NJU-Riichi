@@ -7,7 +7,12 @@
 /src/.umi-test
 /dist
 .swc
+.wrangler
 
-/lib
-
+.vscode/
 .VSCodeCounter/
+
+.cache
+data
+env.local.js
+sql/update*
