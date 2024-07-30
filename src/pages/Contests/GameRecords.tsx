@@ -1,3 +1,4 @@
+import MahjongTags from "@/components/MahjongTags";
 import { getContestRecords } from "@/services/api";
 import { RightSquareOutlined } from "@ant-design/icons";
 import { Radio, RadioChangeEvent, Spin, Table } from "antd";
@@ -24,7 +25,7 @@ interface PlayerInfo {
 
 const GameRecords = () => {
     const [data, setData] = useState<RecordBasic[]>([]);
-    const [mode, setMode] = useState<'seat' | 'rank'>('seat');
+    const [mode, setMode] = useState<'seat' | 'rank'>('rank');
 
     const params = useParams<{ id: string }>();
     // const [pageIndex, setPageIndex] = useState(1);
@@ -77,7 +78,11 @@ const GameRecords = () => {
         {
             title: '标签',
             dataIndex: 'tags',
-            render: (tags: string[]) => tags?.map(tag => <span key={tag}>{tag}</span>)
+            render: (tags: string[]) =>
+                Array.from(new Set(tags))
+                    .filter(tag => tag)
+                    .map((tag) => <MahjongTags tag={tag} />
+                    )
         },
         {
             dataIndex: 'option',

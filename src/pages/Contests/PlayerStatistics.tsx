@@ -24,6 +24,19 @@ interface PlayerData {
 
 const columns = [
     {
+        title: '排名',
+        dataIndex: 'rank',
+        key: 'rank',
+        render: (text: number) => {
+            switch (text) {
+                case 1: return <span>🥇</span>;
+                case 2: return <span>🥈</span>;
+                case 3: return <span>🥉</span>;
+                default: return <span>{text}</span>;
+            }
+        }
+    },
+    {
         title: '玩家昵称',
         dataIndex: 'username',
         key: 'username',
@@ -34,7 +47,7 @@ const columns = [
         key: 'ttl_accuracy',
     },
     {
-        title: '总场数',
+        title: '对局数',
         dataIndex: 'ttl_match',
         key: 'ttl_match',
     },
@@ -89,12 +102,12 @@ const columns = [
         key: 'pct_ura',
     },
     {
-        title: '默和',
+        title: '默听',
         dataIndex: 'pct_dama',
         key: 'pct_dama',
     },
     {
-        title: '副露偏听',
+        title: '偏听',
         dataIndex: 'pct_houfu',
         key: 'pct_houfu',
     },
@@ -112,7 +125,12 @@ const PlayerStatistics = () => {
 
     useEffect(() => {
         getContestPlayers(Number(params.id)).then(res => {
-            setPlayers(res.data);
+            setPlayers(res.data.map((player: any, index: number) => {
+                return {
+                    ...player,
+                    rank: index + 1,
+                }
+            }));
         })
     }, [params.id])
 

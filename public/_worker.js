@@ -82,6 +82,7 @@ FROM GameRecords, \
  GROUP BY uuid \
 ) as rd \
 WHERE GameRecords.uuid=rd.uuid AND GameRecords.contest_id = ? \
+ORDER BY GameRecords.end_time DESC \
 ")
 		.bind(contestId)
 		.all();
