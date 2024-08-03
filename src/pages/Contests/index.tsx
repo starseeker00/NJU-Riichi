@@ -129,7 +129,7 @@ const ContestPage = () => {
           collapsed={collapsed}
           onCollapse={(value) => setCollapsed(value)}
           collapsedWidth={0}
-          zeroWidthTriggerStyle={{top: 0}}
+          zeroWidthTriggerStyle={{ top: 0 }}
         >
           <Menu
             mode="inline"
@@ -142,23 +142,25 @@ const ContestPage = () => {
           <Content style={{ padding: '0 52px', minHeight: 280 }}>
             <h2>{contests.filter(item => item.contest_id === contestId)[0]?.name}</h2>
             <p>{contests.filter(item => item.contest_id === contestId)[0]?.description}</p>
-            <Menu
-              mode="horizontal"
-              selectedKeys={[tab]}
-              items={[
-                {
-                  key: 'players',
-                  label: '玩家统计',
-                },
-                {
-                  key: 'records',
-                  label: '牌谱记录',
-                },
-              ]}
-              onClick={({ key }) => { navigate(`${contestId}/${key}`, { replace: true }) }}
-            />
-            <Outlet />
-
+            <div style={{ position: 'relative' }}>
+              <Menu
+                mode="horizontal"
+                selectedKeys={[tab]}
+                items={[
+                  {
+                    key: 'players',
+                    label: '玩家统计',
+                  },
+                  {
+                    key: 'records',
+                    label: '牌谱记录',
+                  },
+                ]}
+                onClick={({ key }) => { navigate(`${contestId}/${key}`, { replace: true }) }}
+                style={{ marginBottom: 8 }}
+              />
+              <Outlet />
+            </div>
           </Content>
         }
       </Layout>

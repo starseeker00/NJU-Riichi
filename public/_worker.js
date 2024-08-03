@@ -102,29 +102,56 @@ WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.uuid = ?\
 
 async function getContestPlayerList(db, contestId) {
 	const records = await db.prepare("\
-SELECT \
- user_id, username, \
- ROUND(sum(accuracy)/1000., 1) as ttl_accuracy, \
- count(*) as ttl_match, \
- ROUND(AVG(rank),2) as avg_rank, \
- sum(dadian)/sum(hule) as avg_dadian, \
- ROUND(100.*sum(hule)/sum(matchs), 2) as pct_hu, \
- ROUND(100.*sum(zimo)/sum(hule), 2) as pct_zimo, \
- ROUND(100.*sum(chong)/sum(matchs), 2) as pct_chong, \
- ROUND(100.*sum(lizhi)/sum(matchs), 2) as pct_lizhi, \
- ROUND(100.*sum(fulu)/sum(matchs), 2) as pct_fulu, \
- ROUND(100.*sum(zhuili)/sum(lizhi), 2) as pct_zhuili, \
- ROUND(100.*sum(zhenli)/sum(lizhi), 2) as pct_zhenli, \
- ROUND(100.*sum(ura)/sum(lizhi), 2) as pct_ura, \
- ROUND(100.*sum(dama)/sum(hule), 2) as pct_dama, \
- ROUND(100.*sum(houfu)/sum(fulu), 2) as pct_houfu, \
- ROUND(100.*sum(zhenting)/sum(hule), 2) as pct_zhenting \
-FROM GameRecords, RecordDetail \
-WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.contest_id = ? \
-GROUP BY RecordDetail.user_id, RecordDetail.username \
+SELECT * \
+FROM \
+(SELECT \
+  user_id, username, \
+  ROUND(sum(accuracy)/1000., 1) as ttl_accuracy, \
+  count(*) as ttl_match, \
+  ROUND(AVG(rank),2) as avg_rank, \
+  sum(dadian)/sum(hule) as avg_dadian, \
+  ROUND(100.*sum(hule)/sum(matchs), 2) as pct_hu, \
+  ROUND(100.*sum(zimo)/sum(hule), 2) as pct_zimo, \
+  ROUND(100.*sum(chong)/sum(matchs), 2) as pct_chong, \
+  ROUND(100.*sum(lizhi)/sum(matchs), 2) as pct_lizhi, \
+  ROUND(100.*sum(fulu)/sum(matchs), 2) as pct_fulu, \
+  ROUND(100.*sum(zhuili)/sum(lizhi), 2) as pct_zhuili, \
+  ROUND(100.*sum(zhenli)/sum(lizhi), 2) as pct_zhenli, \
+  ROUND(100.*sum(ura)/sum(lizhi), 2) as pct_ura, \
+  ROUND(100.*sum(dama)/sum(hule), 2) as pct_dama, \
+  ROUND(100.*sum(houfu)/sum(fulu), 2) as pct_houfu, \
+  ROUND(100.*sum(zhenting)/sum(hule), 2) as pct_zhenting \
+ FROM GameRecords, RecordDetail \
+ WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.contest_id = ? \
+ GROUP BY RecordDetail.user_id, RecordDetail.username \
+) as t0 \
+JOIN \
+(SELECT uid, name, \
+  round(1.* sum(rank_sum) / sum(rank_count), 2) AS opp_avg_rank \
+ FROM \
+  (SELECT \
+    r1.user_id uid, \
+    r1.username name, \
+    r2.user_id opp_uid, \
+    r2.username opp_name \
+   FROM RecordDetail r1, RecordDetail r2, GameRecords \
+   WHERE r1.uuid = r2.uuid AND name <> opp_name \
+    AND GameRecords.uuid = r1.uuid AND GameRecords.contest_id = ? \
+   GROUP BY uid, name, opp_uid, opp_name \
+  ) AS t1 \
+  JOIN \
+  (SELECT user_id, \
+    sum(rank) AS rank_sum, \
+	count(rank) AS rank_count \
+   FROM RecordDetail, GameRecords \
+   WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.contest_id = ? \
+   GROUP BY user_id \
+  ) AS t2 ON t1.opp_uid = t2.user_id \
+ GROUP BY uid, name \
+) as t on t0.user_id = t.uid \
 ORDER BY ttl_accuracy DESC \
 ")
-		.bind(contestId)
+		.bind(contestId, contestId, contestId)
 		.all();
 	return records.results;
 }

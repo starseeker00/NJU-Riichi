@@ -14,7 +14,7 @@ export default function HomePage() {
         <li><CheckSquareTwoTone />（优先）赛事成绩统计</li>
         <li><CheckSquareTwoTone />（可能）类似ml的局内分数变化</li>
         <li><CheckSquareTwoTone />（可能）类似牌谱屋的数据统计</li>
-        <li>（新）牌谱和数据的过滤及排序功能</li>
+        <li><CheckSquareTwoTone />（新）牌谱和数据的过滤及排序功能</li>
         <li>（持续）页面美化</li>
         <li>（更多）欢迎向我提建议</li>
       </ul>

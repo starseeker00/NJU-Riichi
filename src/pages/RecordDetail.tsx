@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "umi";
 
 interface RecordDetailData {
+    user_id: number;
     username: string;
     lizhi: number;
     hule: number;
@@ -37,10 +38,10 @@ const columns = [
         key: 'chong',
     },
     {
-        title: '标签',
+        title: '成就',
         dataIndex: 'tags',
         key: 'tags',
-        render: (tags: string) => tags?.split(',').map((tag) => <MahjongTags tag={tag} />)
+        render: (tags: string) => tags?.split(',').map((tag) => <MahjongTags key={tag} tag={tag} />)
     }
 ];
 
@@ -56,6 +57,7 @@ const RecordDetail = () => {
         getRecordDetail(String(params.uuid)).then(res => {
             const detailData = res.data.map((item: any) => ({
                 ...item,
+                key: item.user_id,
                 ju_list: item.ju_list.split(','),
                 score_list: item.score_list.split(',').map((score: string) => Number(score))
             }))
@@ -105,6 +107,9 @@ const RecordDetail = () => {
                 data: item.score_list
             }))
         });
+        return () => {
+            chartInstance.dispose();
+        }
     }, [data]);
 
 
@@ -124,7 +129,14 @@ const RecordDetail = () => {
                             }}>
                                 牌谱ID: {params.uuid}
                             </Typography.Paragraph>
-                            <Typography.Link href={paipu} target="_blank">查看牌谱<LinkOutlined /></Typography.Link>
+                            <Space size='middle' split>
+                                <Typography.Link href={paipu} target="_blank">
+                                    查看牌谱(雀魂) <LinkOutlined />
+                                </Typography.Link>
+                                <Typography.Link href={`https://mjai.ekyu.moe/zh-cn.html?url=${encodeURIComponent(paipu)}`} target="_blank">
+                                    AI检讨(Mortal) <LinkOutlined />
+                                </Typography.Link>
+                            </Space>
                             <Table dataSource={data} columns={columns} pagination={{ hideOnSinglePage: true }} />
                         </Space>
                     </Col>
