@@ -1,10 +1,10 @@
 import { getContests } from "@/services/api";
-import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { ConfigProvider, Layout, Menu, Spin, theme } from "antd";
+import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Layout, Menu, Spin, Tag, theme } from "antd";
 import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { MenuItemGroupType } from "antd/es/menu/interface";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "umi";
 
 
@@ -46,19 +46,8 @@ const ContestPage = () => {
     });
   }, []);
 
-  const [contestId, setContestId] = useState(0);
-  const [tab, setTab] = useState<'players' | 'records'>('players');
-
-  useEffect(() => {
-    // console.log(location.pathname);
-    const [e, t] = location.pathname.trim().split('/').slice(2);
-    setContestId(Number(e));
-    setTab(t as 'players' | 'records');
-  }, [location.pathname]);
-
-
-  function filterContests(contestList: Contest[]) {
-    const contestGroup: MenuItemGroupType[] = [
+  const filterContests = useMemo((): MenuItemGroupType[] => {
+    return [
       {
         label: (
           <>
@@ -68,7 +57,7 @@ const ContestPage = () => {
         ),
         key: 'ongoing',
         type: 'group',
-        children: contestList
+        children: contests
           .filter((contest) => {
             const now = Date.now() / 1000;
             return now >= contest.start_time && now <= contest.finish_time;
@@ -87,7 +76,7 @@ const ContestPage = () => {
         ),
         key: 'notStarted',
         type: 'group',
-        children: contestList
+        children: contests
           .filter((contest) => {
             const now = Date.now() / 1000;
             return now < contest.start_time;
@@ -106,7 +95,7 @@ const ContestPage = () => {
         ),
         key: 'ended',
         type: 'group',
-        children: contestList
+        children: contests
           .filter((contest) => {
             const now = Date.now() / 1000;
             return now > contest.finish_time;
@@ -117,8 +106,22 @@ const ContestPage = () => {
           })),
       },
     ];
-    return contestGroup;
-  }
+  }, [contests]);
+
+  const [contestId, setContestId] = useState(0);
+  const [tab, setTab] = useState<'players' | 'records'>('players');
+
+  useEffect(() => {
+    // console.log(location.pathname);
+    const [e, t] = location.pathname.trim().split('/').slice(2);
+    setContestId(Number(e));
+    setTab(t as 'players' | 'records');
+  }, [location.pathname]);
+
+  const selectedContest = useMemo(() => (
+    contests.filter((item) => item.contest_id === contestId)[0]
+  ), [contestId, contests]);
+
 
   return (
     <Spin spinning={contests.length === 0} size="large">
@@ -134,14 +137,20 @@ const ContestPage = () => {
           <Menu
             mode="inline"
             selectedKeys={[contestId.toString()]}
-            items={filterContests(contests).filter((group) => group.children?.length)}
+            items={filterContests.filter((group) => group.children?.length)}
             onClick={({ key }) => { navigate(`${key}/players`) }}
           />
         </Sider>
         {contests.length > 0 &&
           <Content style={{ padding: '0 52px', minHeight: 280 }}>
-            <h2>{contests.filter(item => item.contest_id === contestId)[0]?.name}</h2>
-            <p>{contests.filter(item => item.contest_id === contestId)[0]?.description}</p>
+            <h2>
+              {selectedContest?.name}
+              <Tag color="blue" style={{ marginLeft: 16 }}>
+                <CalendarOutlined style={{ paddingRight: 8 }} />
+                {new Date(selectedContest?.start_time * 1000).toLocaleString()} - {new Date(selectedContest?.finish_time * 1000).toLocaleString()}
+              </Tag>
+            </h2>
+            <p>{selectedContest?.description}</p>
             <div style={{ position: 'relative' }}>
               <Menu
                 mode="horizontal"

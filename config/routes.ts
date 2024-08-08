@@ -1,5 +1,6 @@
 const routes = [
     {
+        title: '首页',
         path: "/",
         redirect: "/home"
     },

@@ -5,18 +5,22 @@ const MahjongTags = (props: { tag: string }) => {
 
     function getColor(tag: string) {
         switch (tag) {
-            case '烧鸡':
-                return 'red';
             case '役满':
                 return 'gold';
             case 'w立直':
-                return 'cyan';
-            case '立一摸':
-                return 'green';
-            case '里三':
+                return 'orange';
+            case '立一摸里三':
                 return 'purple';
-            default:
+            case '立一摸':
+                return 'cyan';
+            case '里三':
                 return 'blue';
+            case '大吊车':
+                return 'magenta';
+            case '烧鸡':
+                return 'red';
+            default:
+                return 'default';
         }
     }
 

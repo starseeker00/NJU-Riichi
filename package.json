@@ -8,11 +8,12 @@
     "build": "umi build",
     "postinstall": "umi setup",
     "setup": "umi setup",
-    "server": "wrangler dev --env dev",
-    "d1:local": "wrangler d1 execute majsoul --local --env dev",
-    "d1:remote": "wrangler d1 execute majsoul --remote --env dev",
-    "predeploy": "npm run build && wrangler dev --env prod",
-    "deploy": "wrangler pages deploy --env prod"
+    "server": "wrangler dev",
+    "d1:local": "wrangler d1 execute majsoul --local",
+    "d1:remote": "wrangler d1 execute majsoul --remote",
+    "predeploy": "npm run build && wrangler pages dev",
+    "deploy": "wrangler pages publish --branch main",
+    "wrangler": "wrangler"
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
