@@ -187,6 +187,7 @@ const PlayerStatistics = () => {
     const params = useParams<{ id: string }>();
 
     useEffect(() => {
+        setLoading(true);
         getContestPlayers(Number(params.id)).then(res => {
             setPlayers(res.data.map((player: any, index: number) => {
                 return {

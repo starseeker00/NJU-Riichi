@@ -9,10 +9,11 @@
     "postinstall": "umi setup",
     "setup": "umi setup",
     "server": "wrangler dev",
+    "update": "node ./lib/update.js",
     "d1:local": "wrangler d1 execute majsoul --local",
     "d1:remote": "wrangler d1 execute majsoul --remote",
     "predeploy": "npm run build && wrangler pages dev",
-    "deploy": "wrangler pages publish --branch main",
+    "deploy": "wrangler pages deploy --branch main",
     "wrangler": "wrangler"
   },
   "dependencies": {

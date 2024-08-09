@@ -34,6 +34,7 @@ const GameRecords = () => {
     const params = useParams<{ id: string }>();
 
     useEffect(() => {
+        setLoading(true);
         getContestRecords(Number(params.id)).then(res => {
             const records = res.data.map((record: any) => {
                 return {
