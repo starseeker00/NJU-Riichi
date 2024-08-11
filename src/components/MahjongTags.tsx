@@ -15,6 +15,8 @@ const MahjongTags = (props: { tag: string }) => {
                 return 'cyan';
             case '里三':
                 return 'blue';
+            case '岭上开花':
+                return 'green';
             case '大吊车':
                 return 'magenta';
             case '烧鸡':

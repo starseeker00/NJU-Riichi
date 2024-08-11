@@ -1,11 +1,7 @@
 DROP TABLE IF EXISTS RecordBasic;
-
 DROP TABLE IF EXISTS RecordDetail;
-
 DROP TABLE IF EXISTS GameRecords;
-
 DROP TABLE IF EXISTS Contests;
-
 -- 赛事列表
 CREATE TABLE IF NOT EXISTS Contests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,19 +10,20 @@ CREATE TABLE IF NOT EXISTS Contests (
     nickname TEXT,
     description TEXT NOT NULL,
     start_time TIMESTAMP NOT NULL,
-    finish_time TIMESTAMP NOT NULL
+    finish_time TIMESTAMP NOT NULL,
+    rule INTEGER NOT NULL DEFAULT 0
 );
-
 -- 牌谱记录
 CREATE TABLE IF NOT EXISTS GameRecords (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     uuid TEXT NOT NULL UNIQUE,
+    schedule INTEGER NOT NULL DEFAULT 0,
+    remark TEXT,
     contest_id INTEGER NOT NULL,
     end_time TIMESTAMP NOT NULL,
     ju_list TEXT NOT NULL,
     FOREIGN KEY (contest_id) REFERENCES Contests(contest_id)
 );
-
 -- 牌谱个人详细信息
 CREATE TABLE IF NOT EXISTS RecordDetail (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

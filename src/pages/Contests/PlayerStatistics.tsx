@@ -1,13 +1,14 @@
 import { getContestPlayers } from "@/services/api";
-import { Button, Checkbox, Popover, Table } from "antd";
-import { useEffect, useState } from "react";
-import { useParams } from "umi";
+import { Button, Checkbox, Popover, Table, Tooltip } from "antd";
+import { useCallback, useEffect, useState } from "react";
+import { useOutletContext, useParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
-import { FilterFilled, FilterOutlined } from "@ant-design/icons";
+import { FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
 
 interface PlayerData {
     user_id: number;
     username: string;
+    rule_accuracy: number;
     ttl_accuracy: number;
     ttl_match: number;
     avg_rank: number;
@@ -24,6 +25,22 @@ interface PlayerData {
     pct_dama: number;
     pct_houfu: number;
     pct_zhenting: number;
+}
+
+const infoTooltip = ({ title }: { title: string }) => (
+    <Tooltip title={title}>
+        <QuestionCircleOutlined style={{ marginLeft: 4, color: 'grey' }} />
+    </Tooltip>
+)
+
+const ruleMap: { [key: number]: string } = {
+    0: '未设置排名方式',
+    1: '最近3战合计精算分',
+    2: '最近5战合计精算分',
+    12: '最佳连续2战合计精算分',
+    13: '最佳连续3战合计精算分',
+    14: '最佳连续4战合计精算分',
+    15: '最佳连续5战合计精算分',
 }
 
 const columns = [
@@ -48,10 +65,11 @@ const columns = [
         align: 'center' as AlignType,
     },
     {
-        title: '总分',
-        dataIndex: 'ttl_accuracy',
-        key: 'ttl_accuracy',
+        title: '计入分',
+        dataIndex: 'rule_accuracy',
+        key: 'rule_accuracy',
         align: 'center' as AlignType,
+        render: (text: number) => <span>{(text && text !== -Infinity) ? (text / 1000) : '-'}</span>
     },
     {
         title: '对局数',
@@ -59,6 +77,14 @@ const columns = [
         key: 'ttl_match',
         align: 'center' as AlignType,
         sorter: (a: PlayerData, b: PlayerData) => a.ttl_match - b.ttl_match,
+        showSorterTooltip: false,
+    },
+    {
+        title: '总分',
+        dataIndex: 'ttl_accuracy',
+        key: 'ttl_accuracy',
+        align: 'center' as AlignType,
+        sorter: (a: PlayerData, b: PlayerData) => a.ttl_accuracy - b.ttl_accuracy,
         showSorterTooltip: false,
     },
     {
@@ -180,25 +206,55 @@ const defaultColumns = columns
     .filter(({ key }) => !['pct_zhenli', 'pct_zhuili', 'pct_houfu', 'pct_zhenting'].includes(key))
     .map(({ key }) => key);
 
+
+
 const PlayerStatistics = () => {
     const [loading, setLoading] = useState(true);
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
     const params = useParams<{ id: string }>();
+    const { rule } = useOutletContext<{ rule: number }>();
 
     useEffect(() => {
         setLoading(true);
         getContestPlayers(Number(params.id)).then(res => {
-            setPlayers(res.data.map((player: any, index: number) => {
-                return {
+            const data = rule
+                ? res.data
+                    .map((player: any, index: number) => {
+                        return {
+                            ...player,
+                            rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
+                        }
+                    })
+                    .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
+                : res.data;
+            setPlayers(
+                data.map((player: PlayerData, index: number) => ({
                     ...player,
                     key: player.user_id,
-                    rank: index + 1,
-                }
-            }));
+                    rank: index + 1
+                }))
+            );
             setLoading(false);
         })
-    }, [params.id])
+    }, [params.id, rule]);
+
+    const calc_rule_accuracy = (accuracyList: number[], rule: number) => {
+        if (rule >= 12) {
+            const len = rule - 10;
+            let max = -Infinity;
+            for (let i = 0; i <= accuracyList.length - len; i++) {
+                max = Math.max(max, accuracyList.slice(i, i + len).reduce((a, b) => a + b, 0));
+            }
+            return max;
+        } else if (rule === 1) {
+            return accuracyList.length >= 3 ? accuracyList.slice(-3).reduce((a, b) => a + b, 0) : -Infinity;
+        } else if (rule === 2) {
+            return accuracyList.length >= 5 ? accuracyList.slice(-5).reduce((a, b) => a + b, 0) : -Infinity;
+        } else {
+            return -Infinity;
+        }
+    }
 
     const [open, setOpen] = useState(false);
     const [selectedColumns, setSelectedColumns] = useState<string[]>(defaultColumns);
@@ -228,11 +284,27 @@ const PlayerStatistics = () => {
                 loading={loading}
                 dataSource={players}
                 columns={
-                    columns.map(column => ({
-                        ...column,
-                        hidden: options.map(option => option.value).includes(column.key)
-                            && !selectedColumns.includes(column.key)
-                    }))
+                    columns.map(column => {
+                        if (['rule_accuracy'].includes(column.key)) {
+                            {
+                                return {
+                                    ...column,
+                                    title: (
+                                        <span>
+                                            {column.title}
+                                            {infoTooltip({ title: ruleMap[rule] })}
+                                        </span>
+                                    ),
+                                    hidden: !rule,
+                                }
+                            }
+                        }
+                        else return {
+                            ...column,
+                            hidden: options.map(option => option.value).includes(column.key)
+                                && !selectedColumns.includes(column.key)
+                        }
+                    })
                 }
             />
         </>

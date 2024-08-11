@@ -15,6 +15,7 @@ interface Contest {
   nickname: string;
   start_time: number;
   finish_time: number;
+  rule: number;
   description: string;
 }
 
@@ -168,7 +169,7 @@ const ContestPage = () => {
                 onClick={({ key }) => { navigate(`${contestId}/${key}`, { replace: true }) }}
                 style={{ marginBottom: 8 }}
               />
-              <Outlet />
+              <Outlet context={{ rule: selectedContest?.rule }} />
             </div>
           </Content>
         }

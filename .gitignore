@@ -15,4 +15,5 @@
 .cache
 data
 env.local.js
-sql/update*
+sql/update*.sql
+sql/init*.sql

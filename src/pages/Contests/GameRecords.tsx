@@ -10,6 +10,8 @@ import { SortOrder } from 'antd/es/table/interface';
 
 interface RecordBasic {
     uuid: string;
+    schedule: number;
+    remark: string;
     end_time: number;
     data: PlayerInfo[];
     tags?: string[];
@@ -24,6 +26,11 @@ interface PlayerInfo {
     rank: number;
 }
 
+const scheduleMap: { [key: number]: string } = {
+    0: '自由匹配',
+    1: '海选赛',
+    2: '淘汰赛'
+}
 
 const GameRecords = () => {
     const [loading, setLoading] = useState(true);
@@ -50,6 +57,20 @@ const GameRecords = () => {
     }, [params.id]);
 
     const columns = [
+        {
+            title: '赛程',
+            dataIndex: 'schedule',
+            key: 'schedule',
+            align: 'center' as AlignType,
+            render: (schedule: number, record: RecordBasic) => {
+                return (scheduleMap[schedule] || '未知') + (record.remark ? ` (${record.remark})` : '');
+            },
+            filters: [
+                { text: '海选赛', value: 1 },
+                { text: '淘汰赛', value: 2 },
+            ],
+            onFilter: (value: number, record: RecordBasic) => record.schedule === value,
+        },
         {
             title: '完场时间',
             dataIndex: 'end_time',
@@ -102,7 +123,18 @@ const GameRecords = () => {
                 Array.from(new Set(tags))
                     .filter(tag => tag)
                     .map((tag) => <MahjongTags key={tag} tag={tag} />
-                    )
+                    ),
+            filters: [
+                { text: '役满', value: '役满' },
+                { text: 'w立直', value: 'w立直' },
+                { text: '立一摸里三', value: '立一摸里三' },
+                { text: '立一摸', value: '立一摸' },
+                { text: '里三', value: '里三' },
+                { text: '岭上开花', value: '岭上开花' },
+                { text: '大吊车', value: '大吊车' },
+                { text: '烧鸡', value: '烧鸡' },
+            ],
+            onFilter: (value: string, record: RecordBasic) => record.tags?.includes(value),
         },
         {
             dataIndex: 'option',
