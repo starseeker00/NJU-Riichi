@@ -218,20 +218,17 @@ const PlayerStatistics = () => {
     useEffect(() => {
         setLoading(true);
         getContestPlayers(Number(params.id)).then(res => {
-            const data = rule
-                ? res.data
-                    .map((player: any, index: number) => {
-                        return {
-                            ...player,
-                            rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
-                        }
-                    })
-                    .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
-                : res.data;
-            setPlayers(
-                data.map((player: PlayerData, index: number) => ({
+            setPlayers(res.data
+                .map((player: any) => {
+                    return {
+                        ...player,
+                        key: player.user_id,
+                        rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
+                    }
+                })
+                .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
+                .map((player: PlayerData, index: number) => ({
                     ...player,
-                    key: player.user_id,
                     rank: index + 1
                 }))
             );
@@ -248,9 +245,9 @@ const PlayerStatistics = () => {
             }
             return max;
         } else if (rule === 1) {
-            return accuracyList.length >= 3 ? accuracyList.slice(-3).reduce((a, b) => a + b, 0) : -Infinity;
+            return accuracyList.length >= 3 ? accuracyList.slice(0, 3).reduce((a, b) => a + b, 0) : -Infinity;
         } else if (rule === 2) {
-            return accuracyList.length >= 5 ? accuracyList.slice(-5).reduce((a, b) => a + b, 0) : -Infinity;
+            return accuracyList.length >= 5 ? accuracyList.slice(0, 5).reduce((a, b) => a + b, 0) : -Infinity;
         } else {
             return -Infinity;
         }

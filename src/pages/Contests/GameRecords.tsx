@@ -127,14 +127,19 @@ const GameRecords = () => {
             filters: [
                 { text: '役满', value: '役满' },
                 { text: 'w立直', value: 'w立直' },
-                { text: '立一摸里三', value: '立一摸里三' },
+                { text: '**稀有**', value: ['立一摸里三', '纯全三色杯'] },
                 { text: '立一摸', value: '立一摸' },
                 { text: '里三', value: '里三' },
                 { text: '岭上开花', value: '岭上开花' },
+                { text: '海底捞月', value: '海底捞月' },
                 { text: '大吊车', value: '大吊车' },
+                { text: '一炮多响', value: '一炮多响' },
                 { text: '烧鸡', value: '烧鸡' },
             ],
-            onFilter: (value: string, record: RecordBasic) => record.tags?.includes(value),
+            onFilter: (value: string | string[], record: RecordBasic) =>
+                Array.isArray(value)
+                    ? value.some(v => record.tags?.includes(v))
+                    : record.tags?.includes(value),
         },
         {
             dataIndex: 'option',

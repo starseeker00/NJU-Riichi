@@ -10,6 +10,7 @@ const MahjongTags = (props: { tag: string }) => {
             case 'w立直':
                 return 'orange';
             case '立一摸里三':
+            case '纯全三色杯':
                 return 'purple';
             case '立一摸':
                 return 'cyan';
@@ -17,8 +18,12 @@ const MahjongTags = (props: { tag: string }) => {
                 return 'blue';
             case '岭上开花':
                 return 'green';
+            case '海底捞月':
+                return 'geekblue';
             case '大吊车':
                 return 'magenta';
+            case '一炮多响':
+                return 'volcano';
             case '烧鸡':
                 return 'red';
             default:
