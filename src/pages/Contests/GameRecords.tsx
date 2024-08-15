@@ -1,9 +1,9 @@
 import MahjongTags from "@/components/MahjongTags";
 import { getContestRecords } from "@/services/api";
-import { RightSquareOutlined, SearchOutlined } from "@ant-design/icons";
-import { Form, Input, Radio, Table } from "antd";
+import { RightSquareOutlined, SearchOutlined, StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
+import { Button, Form, Input, Radio, Space, Table } from "antd";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "umi";
+import { Link, useNavigate, useParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
 import { SortOrder } from 'antd/es/table/interface';
 
@@ -39,6 +39,7 @@ const GameRecords = () => {
     const [mode, setMode] = useState<'seat' | 'rank'>('rank');
 
     const params = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
@@ -55,6 +56,16 @@ const GameRecords = () => {
             setLoading(false);
         })
     }, [params.id]);
+
+    const [star, setStar] = useState<string[]>([]);
+    const [showStar, setShowStar] = useState<boolean>(false);
+
+    useEffect(() => {
+        const star = localStorage.getItem('star');
+        if (star) {
+            setStar(JSON.parse(star));
+        }
+    }, []);
 
     const columns = [
         {
@@ -146,7 +157,16 @@ const GameRecords = () => {
             key: 'option',
             align: 'center' as AlignType,
             render: (text: any, record: any) => {
-                return <Link to={`/records/${record.uuid}`}><RightSquareOutlined /></Link>
+                return (
+                    <Space>
+                        <Button type="text" icon={star.includes(record.uuid) ? <StarFilled /> : <StarOutlined />}
+                            onClick={() => {
+                                localStorage.setItem('star', JSON.stringify(star.includes(record.uuid) ? star.filter(item => item !== record.uuid) : [...star, record.uuid]));
+                                setStar(star.includes(record.uuid) ? star.filter(item => item !== record.uuid) : [...star, record.uuid])
+                            }} />
+                        <Button type="text" icon={<RightSquareOutlined />} onClick={() => navigate(`/records/${record.uuid}`)} />
+                    </Space>
+                )
             }
         }
     ]
@@ -171,6 +191,12 @@ const GameRecords = () => {
         <>
             <Form layout="inline" style={{ position: 'absolute', top: 8, right: 0 }}>
                 <Form.Item>
+                    <Button icon={<StarFilled />}
+                        type={showStar ? 'primary' : 'default'}
+                        onClick={() => { setShowStar(!showStar); }}
+                    >收藏</Button>
+                </Form.Item>
+                <Form.Item>
                     <Input
                         variant="filled"
                         prefix={<SearchOutlined />}
@@ -189,6 +215,7 @@ const GameRecords = () => {
             <Table
                 loading={loading}
                 dataSource={data
+                    .filter(record => !showStar || star.includes(record.uuid))
                     .filter(record => record.data.some(player => player.username.includes(search)))
                     .map(transformRecord)
                 }

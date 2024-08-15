@@ -18,6 +18,12 @@ interface RecordDetailData {
 
 const columns = [
     {
+        title: '座位',
+        dataIndex: 'seat',
+        key: 'seat',
+        render: (seat: number) => ['东', '南', '西', '北'][seat]
+    },
+    {
         title: '玩家昵称',
         dataIndex: 'username',
         key: 'username',
@@ -66,10 +72,22 @@ const RecordDetail = () => {
     }, [params.uuid]);
 
     const chartRef = useRef(null);
+    const [chartInstance, setChartInstance] = useState<echarts.ECharts>();
+
+    useEffect(() => {
+        if (!chartRef.current) return;
+        
+        const chart = echarts.init(chartRef.current);
+        setChartInstance(chart);
+
+        return () => {
+            chart.dispose();
+        };
+    }, []);
 
     useEffect(() => {
         // console.log(chartRef.current);
-        const chartInstance = echarts.init(chartRef.current)
+        if (!chartInstance || !data) return;
         chartInstance.setOption({
             title: {
                 text: ''
@@ -107,11 +125,20 @@ const RecordDetail = () => {
                 data: item.score_list
             }))
         });
-        return () => {
-            chartInstance.dispose();
-        }
     }, [data]);
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (!chartInstance) return;
+            chartInstance.resize();
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [chartInstance]);
 
     return (
         <div>
@@ -121,7 +148,7 @@ const RecordDetail = () => {
                     <Col span={16}>
                         <div ref={chartRef} style={{ height: 500 }}></div>
                     </Col>
-                    <Col span={7} offset={1}>
+                    <Col span={8} style={{ paddingLeft: 16 }}>
                         <Space direction="vertical">
                             <Typography.Paragraph copyable={{
                                 tooltips: ['复制牌谱链接', '已复制'],

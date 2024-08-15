@@ -202,10 +202,10 @@ const columns = [
 ]
 
 const options = columns.slice(4).map(({ key, title }) => ({ label: title, value: key }));
+const hiddenColumns = ['opp_avg_rank', 'pct_zhenli', 'pct_zhuili', 'pct_houfu', 'pct_zhenting']
 const defaultColumns = columns
-    .filter(({ key }) => !['pct_zhenli', 'pct_zhuili', 'pct_houfu', 'pct_zhenting'].includes(key))
+    .filter(({ key }) => !hiddenColumns.includes(key))
     .map(({ key }) => key);
-
 
 
 const PlayerStatistics = () => {
@@ -218,25 +218,12 @@ const PlayerStatistics = () => {
     useEffect(() => {
         setLoading(true);
         getContestPlayers(Number(params.id)).then(res => {
-            setPlayers(res.data
-                .map((player: any) => {
-                    return {
-                        ...player,
-                        key: player.user_id,
-                        rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
-                    }
-                })
-                .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
-                .map((player: PlayerData, index: number) => ({
-                    ...player,
-                    rank: index + 1
-                }))
-            );
+            setPlayers(res.data);
             setLoading(false);
         })
-    }, [params.id, rule]);
+    }, [params.id]);
 
-    const calc_rule_accuracy = (accuracyList: number[], rule: number) => {
+    const calc_rule_accuracy = useCallback((accuracyList: number[], rule: number) => {
         if (rule >= 12) {
             const len = rule - 10;
             let max = -Infinity;
@@ -251,7 +238,7 @@ const PlayerStatistics = () => {
         } else {
             return -Infinity;
         }
-    }
+    }, []);
 
     const [open, setOpen] = useState(false);
     const [selectedColumns, setSelectedColumns] = useState<string[]>(defaultColumns);
@@ -279,27 +266,37 @@ const PlayerStatistics = () => {
             </Popover>
             <Table
                 loading={loading}
-                dataSource={players}
-                columns={
-                    columns.map(column => {
+                dataSource={players
+                    .map((player: any) => ({
+                        ...player,
+                        key: player.user_id,
+                        rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
+                    }))
+                    .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
+                    .map((player: PlayerData, index: number) => ({
+                        ...player,
+                        rank: index + 1
+                    }))
+                }
+                columns={columns
+                    .map(column => {
                         if (['rule_accuracy'].includes(column.key)) {
-                            {
-                                return {
-                                    ...column,
-                                    title: (
-                                        <span>
-                                            {column.title}
-                                            {infoTooltip({ title: ruleMap[rule] })}
-                                        </span>
-                                    ),
-                                    hidden: !rule,
-                                }
-                            }
-                        }
-                        else return {
-                            ...column,
-                            hidden: options.map(option => option.value).includes(column.key)
-                                && !selectedColumns.includes(column.key)
+                            return {
+                                ...column,
+                                title: (
+                                    <span>
+                                        {column.title}
+                                        {infoTooltip({ title: ruleMap[rule] })}
+                                    </span>
+                                ),
+                                hidden: !rule,
+                            };
+                        } else {
+                            return {
+                                ...column,
+                                hidden: options.map(option => option.value).includes(column.key)
+                                    && !selectedColumns.includes(column.key)
+                            };
                         }
                     })
                 }

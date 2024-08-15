@@ -93,7 +93,8 @@ async function getGameRecordDetail(db, uuid) {
 	const records = await db.prepare("\
 SELECT * \
 FROM GameRecords, RecordDetail \
-WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.uuid = ?\
+WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.uuid = ? \
+ORDER BY RecordDetail.seat \
 ")
 		.bind(uuid)
 		.all();
