@@ -3,7 +3,7 @@ import { getContestRecords } from "@/services/api";
 import { RightSquareOutlined, SearchOutlined, StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import { Button, Form, Input, Radio, Space, Table } from "antd";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "umi";
+import { Link, useNavigate, useParams, useSearchParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
 import { SortOrder } from 'antd/es/table/interface';
 
@@ -35,10 +35,10 @@ const scheduleMap: { [key: number]: string } = {
 const GameRecords = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<RecordBasic[]>([]);
-    const [search, setSearch] = useState<string>('');
     const [mode, setMode] = useState<'seat' | 'rank'>('rank');
 
     const params = useParams<{ id: string }>();
+    const [searchParams, setSearchParams] = useSearchParams({ page: '1', pageSize: '10', search: '' });
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -138,7 +138,7 @@ const GameRecords = () => {
             filters: [
                 { text: '役满', value: '役满' },
                 { text: 'w立直', value: 'w立直' },
-                { text: '**稀有**', value: ['立一摸里三', '纯全三色杯'] },
+                { text: '**稀有**', value: ['立一摸里三', '纯全三色杯', '断平两杯口'] },
                 { text: '立一摸', value: '立一摸' },
                 { text: '里三', value: '里三' },
                 { text: '岭上开花', value: '岭上开花' },
@@ -202,7 +202,8 @@ const GameRecords = () => {
                         prefix={<SearchOutlined />}
                         placeholder="搜索玩家"
                         allowClear
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={searchParams.get('search') || ''}
+                        onChange={(e) => setSearchParams({ search: e.target.value })}
                     />
                 </Form.Item>
                 <Form.Item label="排序方式">
@@ -216,10 +217,21 @@ const GameRecords = () => {
                 loading={loading}
                 dataSource={data
                     .filter(record => !showStar || star.includes(record.uuid))
-                    .filter(record => record.data.some(player => player.username.includes(search)))
+                    .filter(record => record.data.some(player => player.username.includes(searchParams.get('search') || '')))
                     .map(transformRecord)
                 }
                 columns={columns}
+                pagination={{
+                    current: Number(searchParams.get('page')),
+                    pageSize: Number(searchParams.get('pageSize')),
+                    onChange: (page, pageSize) => {
+                        setSearchParams({
+                            search: searchParams.get('search') || '',
+                            page: page.toString(),
+                            pageSize: pageSize.toString()
+                        });
+                    }
+                }}
             />
         </>
     )

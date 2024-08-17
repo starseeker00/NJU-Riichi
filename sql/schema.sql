@@ -45,6 +45,8 @@ CREATE TABLE IF NOT EXISTS RecordDetail (
     ura INTEGER NOT NULL,
     dadian INTEGER NOT NULL,
     zimo INTEGER NOT NULL,
+    lizhihu INTEGER NOT NULL,
+    fuluhu INTEGER NOT NULL,
     dama INTEGER NOT NULL,
     houfu INTEGER NOT NULL,
     zhenting INTEGER NOT NULL,

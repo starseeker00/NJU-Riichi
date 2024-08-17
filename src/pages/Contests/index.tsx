@@ -143,7 +143,7 @@ const ContestPage = () => {
           />
         </Sider>
         {contests.length > 0 &&
-          <Content style={{ padding: '0 52px', minHeight: 280 }}>
+          <Content style={{ paddingLeft: 52, minHeight: 280 }}>
             <h2>
               {selectedContest?.name}
               <Tag color="blue" style={{ marginLeft: 16 }}>

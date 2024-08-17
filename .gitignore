@@ -17,3 +17,4 @@ data
 env.local.js
 sql/update*.sql
 sql/init*.sql
+sql/temp*.sql

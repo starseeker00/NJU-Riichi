@@ -119,12 +119,12 @@ FROM \
   ROUND(100.*sum(fulu)/sum(matchs), 2) as pct_fulu, \
   ROUND(100.*sum(zhuili)/sum(lizhi), 2) as pct_zhuili, \
   ROUND(100.*sum(zhenli)/sum(lizhi), 2) as pct_zhenli, \
-  ROUND(100.*sum(ura)/sum(lizhi), 2) as pct_ura, \
+  ROUND(100.*sum(ura)/sum(lizhihu), 2) as pct_ura, \
   ROUND(100.*sum(dama)/sum(hule), 2) as pct_dama, \
-  ROUND(100.*sum(houfu)/sum(fulu), 2) as pct_houfu, \
+  ROUND(100.*sum(houfu)/sum(fuluhu), 2) as pct_houfu, \
   ROUND(100.*sum(zhenting)/sum(hule), 2) as pct_zhenting \
  FROM GameRecords, RecordDetail \
- WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.contest_id = ? AND GameRecords.schedule<=1 \
+ WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.contest_id = ? AND GameRecords.schedule=1 \
  GROUP BY RecordDetail.user_id, RecordDetail.username \
 ) as t0 \
 JOIN \
@@ -138,7 +138,7 @@ JOIN \
     r2.username opp_name \
    FROM RecordDetail r1, RecordDetail r2, GameRecords \
    WHERE r1.uuid = r2.uuid AND name <> opp_name \
-    AND GameRecords.uuid = r1.uuid AND GameRecords.contest_id = ? AND GameRecords.schedule<=1 \
+    AND GameRecords.uuid = r1.uuid AND GameRecords.contest_id = ? AND GameRecords.schedule=1 \
    GROUP BY uid, name, opp_uid, opp_name \
   ) AS t1 \
   JOIN \
@@ -146,7 +146,7 @@ JOIN \
     sum(rank) AS rank_sum, \
 	count(rank) AS rank_count \
    FROM RecordDetail, GameRecords \
-   WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.contest_id = ? AND GameRecords.schedule<=1 \
+   WHERE GameRecords.uuid = RecordDetail.uuid AND GameRecords.contest_id = ? AND GameRecords.schedule=1 \
    GROUP BY user_id \
   ) AS t2 ON t1.opp_uid = t2.user_id \
  GROUP BY uid, name \

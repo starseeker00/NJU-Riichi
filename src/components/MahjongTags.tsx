@@ -11,6 +11,7 @@ const MahjongTags = (props: { tag: string }) => {
                 return 'orange';
             case '立一摸里三':
             case '纯全三色杯':
+            case '断平两杯口':
                 return 'purple';
             case '立一摸':
                 return 'cyan';
