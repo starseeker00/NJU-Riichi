@@ -5,9 +5,26 @@ export default defineConfig({
   // base: "/NJU-Riichi/",
   // publicPath: "/NJU-Riichi/",
   routes,
+  mock: false,
+  history: { type: 'hash' },
+  npmClient: 'npm',
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8787',
+    },
+  },
+  headScripts: [
+    {
+      // Cloudflare Web Analytics
+      src: 'https://static.cloudflareinsights.com/beacon.min.js',
+      defer: true,
+      'data-cf-beacon': '{"token": "86d141fbf6dc45ecb2530505f7110c11"}',
+    },
+  ],
   metas: [
     {
-      name: 'description', content: '\
+      name: 'description',
+      content: '\
 南京大学里三交流会 \
 立直麻将/雀魂/校内面麻 \
 群号: 614346985 \
@@ -29,12 +46,4 @@ export default defineConfig({
 ' },
     { name: 'keywords', content: '南京大学, 南大, NJU, 立直麻将, Riichi, Mahjong, 雀魂, Majsoul, 赛事, 里三杯' },
   ],
-  mock: false,
-  history: { type: 'hash' },
-  npmClient: 'npm',
-  proxy: {
-    '/api': {
-      target: 'http://localhost:8787',
-    },
-  },
 });

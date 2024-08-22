@@ -1,4 +1,4 @@
-import MahjongTags from "@/components/MahjongTags";
+import MahjongTags, { preset } from "@/components/MahjongTags";
 import { getContestRecords } from "@/services/api";
 import { RightSquareOutlined, SearchOutlined, StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import { Button, Form, Input, Radio, Space, Table } from "antd";
@@ -74,7 +74,7 @@ const GameRecords = () => {
             key: 'schedule',
             align: 'center' as AlignType,
             render: (schedule: number, record: RecordBasic) => {
-                return (scheduleMap[schedule] || '未知') + (record.remark ? ` (${record.remark})` : '');
+                return record.remark || scheduleMap[schedule] || '未知';
             },
             filters: [
                 { text: '海选赛', value: 1 },
@@ -136,9 +136,9 @@ const GameRecords = () => {
                     .map((tag) => <MahjongTags key={tag} tag={tag} />
                     ),
             filters: [
-                { text: '役满', value: '役满' },
-                { text: 'w立直', value: 'w立直' },
-                { text: '**稀有**', value: ['立一摸里三', '纯全三色杯', '断平两杯口'] },
+                { text: '役满', value: preset.legend },
+                { text: '【超稀有】', value: preset.epic },
+                { text: '【稀有】', value: preset.rare },
                 { text: '立一摸', value: '立一摸' },
                 { text: '里三', value: '里三' },
                 { text: '岭上开花', value: '岭上开花' },
@@ -149,7 +149,7 @@ const GameRecords = () => {
             ],
             onFilter: (value: string | string[], record: RecordBasic) =>
                 Array.isArray(value)
-                    ? value.some(v => record.tags?.includes(v))
+                    ? value.some(v => record.tags?.some(tag => tag.startsWith(v)))
                     : record.tags?.includes(value),
         },
         {
