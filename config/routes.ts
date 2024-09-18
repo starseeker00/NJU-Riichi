@@ -38,6 +38,12 @@ const routes = [
         nav: true,
     },
     {
+        title: 'Wiki',
+        path: '/wiki',
+        component: 'Wiki',
+        nav: true,
+    },
+    {
         path: "*",
         component: "404"
     }

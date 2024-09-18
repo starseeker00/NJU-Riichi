@@ -13,7 +13,7 @@ VALUES (
         '第12届NJU立直一发自摸里三杯个人赛',
         '【正赛】NJU里三杯12th',
         1723206270,
-        1730463870,
+        1726416000,
         14,
         ''
     );
@@ -55,5 +55,24 @@ VALUES (
         1723646926,
         1724428800,
         0,
+        ''
+    );
+INSERT
+    OR REPLACE INTO Contests (
+        contest_id,
+        name,
+        nickname,
+        start_time,
+        finish_time,
+        rule,
+        description
+    )
+VALUES (
+        43750978,
+        '三麻下头之王争霸赛',
+        '【三麻】决战下头之巅',
+        1726660920,
+        1758196860,
+        2,
         ''
     );

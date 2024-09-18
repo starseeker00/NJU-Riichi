@@ -6,7 +6,7 @@ export default defineConfig({
   // publicPath: "/NJU-Riichi/",
   routes,
   mock: false,
-  history: { type: 'hash' },
+  // history: { type: 'hash' },
   npmClient: 'npm',
   proxy: {
     '/api': {

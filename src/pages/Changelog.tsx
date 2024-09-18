@@ -59,6 +59,9 @@ const log = {
         '修改了牌谱记录中赛程的描述',
         'add Web Analytics',
     ],
+    '2024-09-19': [
+        '支持三麻数据的统计功能',
+    ],
 }
 
 const Changelog = () => {

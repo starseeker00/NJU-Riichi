@@ -36,6 +36,7 @@ const GameRecords = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<RecordBasic[]>([]);
     const [mode, setMode] = useState<'seat' | 'rank'>('rank');
+    const [isThree, setIsThree] = useState<boolean>(false);
 
     const params = useParams<{ id: string }>();
     const [searchParams, setSearchParams] = useSearchParams({ page: '1', pageSize: '10', search: '' });
@@ -53,6 +54,7 @@ const GameRecords = () => {
                 }
             })
             setData(records);
+            setIsThree(records[0].data.length === 3);
             setLoading(false);
         })
     }, [params.id]);
@@ -121,6 +123,7 @@ const GameRecords = () => {
             title: mode === 'seat' ? '北起' : '四位',
             dataIndex: '3',
             key: '3',
+            hidden: isThree,
             align: 'center' as AlignType,
             // width: 300,
             render: ({ username, score }: PlayerInfo) => <span>{username} ({score})</span>
@@ -142,7 +145,7 @@ const GameRecords = () => {
                 { text: '立一摸', value: '立一摸' },
                 { text: '里三', value: '里三' },
                 { text: '岭上开花', value: '岭上开花' },
-                { text: '海底捞月', value: '海底捞月' },
+                { text: '海底捞月', value: ['海底', '河底'] },
                 { text: '大吊车', value: '大吊车' },
                 { text: '一炮多响', value: '一炮多响' },
                 { text: '烧鸡', value: '烧鸡' },
