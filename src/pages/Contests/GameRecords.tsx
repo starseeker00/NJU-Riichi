@@ -54,7 +54,7 @@ const GameRecords = () => {
                 }
             })
             setData(records);
-            setIsThree(records[0].data.length === 3);
+            setIsThree(records[0]?.data.length === 3);
             setLoading(false);
         })
     }, [params.id]);

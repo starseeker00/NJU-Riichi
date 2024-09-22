@@ -9,11 +9,11 @@ const MahjongTags = (props: { tag: string }) => {
     const { tag } = props;
 
     function getColor(tag: string) {
-        if (legend.some(t => tag.startsWith(t))) {
+        if (legend.some(t => tag.includes(t))) {
             return 'gold';
-        } else if (epic.some(t => tag.startsWith(t))) {
+        } else if (epic.some(t => tag.includes(t))) {
             return 'orange';
-        } else if (rare.some(t => tag.startsWith(t))) {
+        } else if (rare.some(t => tag.includes(t))) {
             return 'purple';
         } else {
             switch (tag) {

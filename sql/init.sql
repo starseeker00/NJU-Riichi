@@ -76,3 +76,22 @@ VALUES (
         2,
         ''
     );
+INSERT
+    OR REPLACE INTO Contests (
+        contest_id,
+        name,
+        nickname,
+        start_time,
+        finish_time,
+        rule,
+        description
+    )
+VALUES (
+        5258982,
+        'NJU M规四麻正直比赛',
+        '【四麻】决战正直之巅',
+        1726742700,
+        1758191940,
+        15,
+        ''
+    );
