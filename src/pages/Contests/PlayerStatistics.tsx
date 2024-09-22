@@ -1,9 +1,9 @@
 import { getContestPlayers } from "@/services/api";
-import { Button, Checkbox, Popover, Table, Tooltip } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { Button, Checkbox, Popover, Space, Table, Tooltip } from "antd";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useOutletContext, useParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
-import { FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
+import { DownloadOutlined, FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
 
 interface PlayerData {
     user_id: number;
@@ -223,7 +223,21 @@ const PlayerStatistics = () => {
         })
     }, [params.id]);
 
-    const calc_rule_accuracy = useCallback((accuracyList: number[], rule: number) => {
+    const playerData = useMemo(() => {
+        return players
+            .map((player: any) => ({
+                ...player,
+                key: player.user_id,
+                rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
+            }))
+            .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
+            .map((player: PlayerData, index: number) => ({
+                ...player,
+                rank: index + 1
+            }))
+    }, [players, rule]);
+
+    function calc_rule_accuracy(accuracyList: number[], rule: number) {
         if (rule >= 12) {
             const len = rule - 10;
             let max = -Infinity;
@@ -238,46 +252,58 @@ const PlayerStatistics = () => {
         } else {
             return -Infinity;
         }
-    }, []);
+    };
+
+    const downloadData = useCallback(() => {
+        const title = columns.map(column => column.title);
+        const dataIndex = columns.map(column => column.dataIndex);
+        const data = playerData.map(player => {
+            return dataIndex.map(key => player[key as keyof PlayerData]);
+        });
+        const csv = 'data:text/csv;charset=utf-8,' + [
+            title.join(','),
+            ...data.map(row => row.join(','))
+        ].join('\n');
+        const encodedUri = encodeURI(csv);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'player_statistics.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, [playerData]);
 
     const [open, setOpen] = useState(false);
     const [selectedColumns, setSelectedColumns] = useState<string[]>(defaultColumns);
 
     return (
         <>
-            <Popover
-                content={
-                    <Checkbox.Group
-                        value={selectedColumns}
-                        options={options}
-                        onChange={(values) => setSelectedColumns(values as string[])}
-                        style={{ width: 200 }}
-                    />
-                }
-                trigger="click"
-                open={open}
-                onOpenChange={(newOpen) => setOpen(newOpen)}
-            >
-                <Button
-                    icon={<FilterFilled />}
-                    size="small"
-                    style={{ position: 'absolute', top: 16, right: 0 }}
-                ></Button>
-            </Popover>
+            <Space style={{ position: 'absolute', top: 16, right: 0 }}>
+                <Popover
+                    content={
+                        <Checkbox.Group
+                            value={selectedColumns}
+                            options={options}
+                            onChange={(values) => setSelectedColumns(values as string[])}
+                            style={{ width: 200 }}
+                        />
+                    }
+                    trigger="click"
+                    open={open}
+                    onOpenChange={(newOpen) => setOpen(newOpen)}
+                >
+                    <Button
+                        icon={<FilterFilled />}
+                        size="small"
+                    ></Button>
+                </Popover>
+                <Tooltip title="导出数据 (csv)">
+                    <Button icon={<DownloadOutlined />} size="small" onClick={downloadData} />
+                </Tooltip>
+            </Space>
             <Table
                 loading={loading}
-                dataSource={players
-                    .map((player: any) => ({
-                        ...player,
-                        key: player.user_id,
-                        rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
-                    }))
-                    .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
-                    .map((player: PlayerData, index: number) => ({
-                        ...player,
-                        rank: index + 1
-                    }))
-                }
+                dataSource={playerData}
                 columns={columns
                     .map(column => {
                         if (['rule_accuracy'].includes(column.key)) {
