@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS Contests (
     description TEXT NOT NULL,
     start_time TIMESTAMP NOT NULL,
     finish_time TIMESTAMP NOT NULL,
+    game_mode INTEGER NOT NULL,
     rule INTEGER NOT NULL DEFAULT 0
 );
 -- 牌谱记录

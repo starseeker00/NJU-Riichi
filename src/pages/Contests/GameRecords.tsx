@@ -3,7 +3,7 @@ import { getContestRecords } from "@/services/api";
 import { RightSquareOutlined, SearchOutlined, StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import { Button, Form, Input, Radio, Space, Table } from "antd";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "umi";
+import { Link, useNavigate, useOutletContext, useParams, useSearchParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
 import { SortOrder } from 'antd/es/table/interface';
 
@@ -36,7 +36,7 @@ const GameRecords = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<RecordBasic[]>([]);
     const [mode, setMode] = useState<'seat' | 'rank'>('rank');
-    const [isThree, setIsThree] = useState<boolean>(false);
+    const { game_mode } = useOutletContext<{ game_mode: number, rule: number }>();
 
     const params = useParams<{ id: string }>();
     const [searchParams, setSearchParams] = useSearchParams({ page: '1', pageSize: '10', search: '' });
@@ -54,7 +54,6 @@ const GameRecords = () => {
                 }
             })
             setData(records);
-            setIsThree(records[0]?.data.length === 3);
             setLoading(false);
         })
     }, [params.id]);
@@ -123,7 +122,7 @@ const GameRecords = () => {
             title: mode === 'seat' ? '北起' : '四位',
             dataIndex: '3',
             key: '3',
-            hidden: isThree,
+            hidden: game_mode > 10,
             align: 'center' as AlignType,
             // width: 300,
             render: ({ username, score }: PlayerInfo) => <span>{username} ({score})</span>

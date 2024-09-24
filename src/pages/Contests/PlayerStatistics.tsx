@@ -8,7 +8,9 @@ import { DownloadOutlined, FilterFilled, QuestionCircleOutlined } from "@ant-des
 interface PlayerData {
     user_id: number;
     username: string;
+    game_mode: number; // 四麻：2，三麻：12
     rule_accuracy: number;
+    rank_list: number[];
     ttl_accuracy: number;
     ttl_match: number;
     avg_rank: number;
@@ -70,6 +72,38 @@ const columns = [
         key: 'rule_accuracy',
         align: 'center' as AlignType,
         render: (text: number) => <span>{(text && text !== -Infinity) ? (text / 1000) : '-'}</span>
+    },
+    {
+        title: '最近趋势',
+        dataIndex: 'rank_list',
+        key: 'rank_list',
+        align: 'center' as AlignType,
+        render: (rankList: number[], record: PlayerData) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 26;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                const y_axis = record.game_mode > 10 ? [1, 13, 25] : [1, 9, 17, 25];
+
+                ctx.strokeStyle = '#d9d9d9';
+                ctx.beginPath();
+                y_axis.forEach(y => {
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(100, y);
+                    ctx.stroke();
+                });
+
+                ctx.strokeStyle = '#1890ff';
+                ctx.beginPath();
+                rankList.forEach((rank, index) => {
+                    ctx.lineTo(index * 10 + 5, y_axis[rank - 1]);
+                    ctx.arc(index * 10 + 5, y_axis[rank - 1], 1, 0, Math.PI * 2);
+                });
+                ctx.stroke();
+            }
+            return <img src={canvas.toDataURL()} alt="rank trend" />;
+        }
     },
     {
         title: '对局数',
@@ -201,7 +235,7 @@ const columns = [
     },
 ]
 
-const options = columns.slice(4).map(({ key, title }) => ({ label: title, value: key }));
+const options = columns.slice(5).map(({ key, title }) => ({ label: title, value: key }));
 const hiddenColumns = ['opp_avg_rank', 'pct_zhenli', 'pct_zhuili', 'pct_houfu', 'pct_zhenting']
 const defaultColumns = columns
     .filter(({ key }) => !hiddenColumns.includes(key))
@@ -213,7 +247,7 @@ const PlayerStatistics = () => {
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
     const params = useParams<{ id: string }>();
-    const { rule } = useOutletContext<{ rule: number }>();
+    const { game_mode, rule } = useOutletContext<{ game_mode: number, rule: number }>();
 
     useEffect(() => {
         setLoading(true);
@@ -228,14 +262,16 @@ const PlayerStatistics = () => {
             .map((player: any) => ({
                 ...player,
                 key: player.user_id,
+                rank_list: player.rank_list.split(',').map(Number).slice(0, 10).reverse(),
                 rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
+                game_mode,
             }))
             .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
             .map((player: PlayerData, index: number) => ({
                 ...player,
                 rank: index + 1
             }))
-    }, [players, rule]);
+    }, [players, game_mode, rule]);
 
     function calc_rule_accuracy(accuracyList: number[], rule: number) {
         if (rule >= 12) {
@@ -258,7 +294,10 @@ const PlayerStatistics = () => {
         const title = columns.map(column => column.title);
         const dataIndex = columns.map(column => column.dataIndex);
         const data = playerData.map(player => {
-            return dataIndex.map(key => player[key as keyof PlayerData]);
+            return dataIndex.map(key => {
+                const cell = player[key as keyof PlayerData]
+                return Array.isArray(cell) ? cell.join(' ') : cell;
+            });
         });
         const csv = 'data:text/csv;charset=utf-8,' + [
             title.join(','),

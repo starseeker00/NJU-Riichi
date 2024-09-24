@@ -15,6 +15,7 @@ interface Contest {
   nickname: string;
   start_time: number;
   finish_time: number;
+  game_mode: number;
   rule: number;
   description: string;
 }
@@ -34,6 +35,7 @@ const ContestPage = () => {
     getContests().then((res) => {
       setContests(res.data);
       if (location.pathname === '/contests' && res.data.length) {
+        console.log(location.pathname);
         const first = res.data.filter((contest: Contest) => {
           const now = Date.now() / 1000;
           return now >= contest.start_time && now <= contest.finish_time;
@@ -45,7 +47,7 @@ const ContestPage = () => {
         }
       }
     });
-  }, []);
+  }, [location.pathname]);
 
   const filterContests = useMemo((): MenuItemGroupType[] => {
     return [
@@ -169,7 +171,10 @@ const ContestPage = () => {
                 onClick={({ key }) => { navigate(`${contestId}/${key}`, { replace: true }) }}
                 style={{ marginBottom: 8 }}
               />
-              <Outlet context={{ rule: selectedContest?.rule }} />
+              <Outlet context={{
+                game_mode: selectedContest?.game_mode,
+                rule: selectedContest?.rule
+              }} />
             </div>
           </Content>
         }

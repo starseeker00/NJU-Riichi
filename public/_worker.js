@@ -109,6 +109,7 @@ FROM \
   user_id, username, \
   ROUND(sum(accuracy)/1000., 1) as ttl_accuracy, \
   group_concat(accuracy ORDER BY end_time DESC) as accuracy_list, \
+  group_concat(rank ORDER BY end_time DESC) as rank_list, \
   count(*) as ttl_match, \
   ROUND(AVG(rank),2) as avg_rank, \
   sum(dadian)/sum(hule) as avg_dadian, \
