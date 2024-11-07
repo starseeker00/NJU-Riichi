@@ -125,7 +125,7 @@ const GameRecords = () => {
             hidden: game_mode > 10,
             align: 'center' as AlignType,
             // width: 300,
-            render: ({ username, score }: PlayerInfo) => <span>{username} ({score})</span>
+            render: ({ username = '', score = 0 }: PlayerInfo) => <span>{username} ({score})</span>
         },
         {
             title: '含以下要素',

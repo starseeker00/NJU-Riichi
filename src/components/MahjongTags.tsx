@@ -1,6 +1,6 @@
 import { Tag } from "antd";
 
-const legend = ['役满', '累计役满']
+const legend = ['役满', '两倍役满', '三倍役满', '四倍役满', '五倍役满', '六倍役满', '累计役满']
 const epic = ['三倍满', '立一摸里三', 'w立直', '小三元', '两杯口', '混老头', '枪杠', '三同刻', '三杠子']
 const rare = ['倍满', '清一色', '三暗刻', '纯全']
 export const preset = { legend, epic, rare }
