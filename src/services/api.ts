@@ -19,3 +19,7 @@ export function getContestRecords(contestId: number) {
 export function getRecordDetail(uuid: string) {
     return axios.get(`/api/getGameRecordDetail?uuid=${uuid}`);
 }
+
+export function getContestTeams(contestId: number) {
+    return axios.get(`/api/getContestTeamList?contestId=${contestId}`);
+}

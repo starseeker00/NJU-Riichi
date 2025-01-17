@@ -21,6 +21,10 @@ const routes = [
                 component: "Contests/PlayerStatistics"
             },
             {
+                path: "/contests/:id/teams",
+                component: "Contests/TeamStatistics"
+            },
+            {
                 path: "/contests/:id/records",
                 component: "Contests/GameRecords"
             }

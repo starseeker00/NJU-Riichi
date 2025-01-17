@@ -1,3 +1,4 @@
+import { StatisticTabType } from "@/const";
 import { getContests } from "@/services/api";
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Menu, Spin, Tag, theme } from "antd";
@@ -16,6 +17,7 @@ interface Contest {
   start_time: number;
   finish_time: number;
   game_mode: number;
+  game_property: number;
   rule: number;
   description: string;
 }
@@ -112,13 +114,13 @@ const ContestPage = () => {
   }, [contests]);
 
   const [contestId, setContestId] = useState(0);
-  const [tab, setTab] = useState<'players' | 'records'>('players');
+  const [tab, setTab] = useState<StatisticTabType>('players');
 
   useEffect(() => {
     // console.log(location.pathname);
     const [e, t] = location.pathname.trim().split('/').slice(2);
     setContestId(Number(e));
-    setTab(t as 'players' | 'records');
+    setTab(t as StatisticTabType);
   }, [location.pathname]);
 
   const selectedContest = useMemo(() => (
@@ -164,6 +166,11 @@ const ContestPage = () => {
                     label: '玩家统计',
                   },
                   {
+                    key: 'teams',
+                    label: '队伍统计',
+                    disabled: selectedContest?.game_property !== 1,
+                  },
+                  {
                     key: 'records',
                     label: '牌谱记录',
                   },
@@ -173,6 +180,7 @@ const ContestPage = () => {
               />
               <Outlet context={{
                 game_mode: selectedContest?.game_mode,
+                game_property: selectedContest?.game_property,
                 rule: selectedContest?.rule
               }} />
             </div>

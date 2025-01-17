@@ -4,8 +4,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useOutletContext, useParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
 import { DownloadOutlined, FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
+import { perset_color } from "@/const";
 
 interface PlayerData {
+    team_id: number;
+    team_name: string;
     user_id: number;
     username: string;
     game_mode: number; // 四麻：2，三麻：12
@@ -59,6 +62,13 @@ const columns = [
                 default: return <span>{text}</span>;
             }
         }
+    },
+    {
+        title: '队伍',
+        dataIndex: 'team_name',
+        key: 'team_name',
+        align: 'center' as AlignType,
+        render: (text: string, record: PlayerData) => (<div style={{ background: perset_color[record.team_id - 1] }}>{text}</div>),
     },
     {
         title: '玩家昵称',
@@ -129,14 +139,14 @@ const columns = [
         sorter: (a: PlayerData, b: PlayerData) => a.avg_rank - b.avg_rank,
         showSorterTooltip: false,
     },
-    {
-        title: '对手均顺',
-        dataIndex: 'opp_avg_rank',
-        key: 'opp_avg_rank',
-        align: 'center' as AlignType,
-        sorter: (a: PlayerData, b: PlayerData) => a.opp_avg_rank - b.opp_avg_rank,
-        showSorterTooltip: false,
-    },
+    // {
+    //     title: '对手均顺',
+    //     dataIndex: 'opp_avg_rank',
+    //     key: 'opp_avg_rank',
+    //     align: 'center' as AlignType,
+    //     sorter: (a: PlayerData, b: PlayerData) => a.opp_avg_rank - b.opp_avg_rank,
+    //     showSorterTooltip: false,
+    // },
     {
         title: '均打点',
         dataIndex: 'avg_dadian',
@@ -247,7 +257,7 @@ const PlayerStatistics = () => {
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
     const params = useParams<{ id: string }>();
-    const { game_mode, rule } = useOutletContext<{ game_mode: number, rule: number }>();
+    const { game_mode, game_property, rule } = useOutletContext<{ game_mode: number, game_property: number, rule: number }>();
 
     useEffect(() => {
         setLoading(true);
@@ -345,23 +355,29 @@ const PlayerStatistics = () => {
                 dataSource={playerData}
                 columns={columns
                     .map(column => {
-                        if (['rule_accuracy'].includes(column.key)) {
-                            return {
-                                ...column,
-                                title: (
-                                    <span>
-                                        {column.title}
-                                        {infoTooltip({ title: ruleMap[rule] })}
-                                    </span>
-                                ),
-                                hidden: !rule,
-                            };
-                        } else {
-                            return {
-                                ...column,
-                                hidden: options.map(option => option.value).includes(column.key)
-                                    && !selectedColumns.includes(column.key)
-                            };
+                        switch (column.key) {
+                            case 'rule_accuracy':
+                                return {
+                                    ...column,
+                                    title: (
+                                        <span>
+                                            {column.title}
+                                            {infoTooltip({ title: ruleMap[rule] })}
+                                        </span>
+                                    ),
+                                    hidden: !rule,
+                                };
+                            case 'team_name':
+                                return {
+                                    ...column,
+                                    hidden: game_property !== 1,
+                                };
+                            default:
+                                return {
+                                    ...column,
+                                    hidden: options.map(option => option.value).includes(column.key)
+                                        && !selectedColumns.includes(column.key)
+                                };
                         }
                     })
                 }

@@ -52,7 +52,7 @@ const GameRecords = () => {
                     data: JSON.parse(record.data),
                     tags: record.tags?.split(',')
                 }
-            })
+            }).filter((record: RecordBasic) => record.schedule >= 0);
             setData(records);
             setLoading(false);
         })

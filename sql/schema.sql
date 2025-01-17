@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS Contests (
     description TEXT NOT NULL,
     start_time TIMESTAMP NOT NULL,
     finish_time TIMESTAMP NOT NULL,
-    game_mode INTEGER NOT NULL,
-    rule INTEGER NOT NULL DEFAULT 0
+    game_mode INTEGER NOT NULL, -- 2: 四麻, 12: 三麻
+    game_property INTEGER NOT NULL DEFAULT 0, -- 比赛性质 0: 默认, 1: 团体赛
+    rule INTEGER NOT NULL DEFAULT 0 -- 计分规则
 );
 -- 牌谱记录
 CREATE TABLE IF NOT EXISTS GameRecords (
@@ -57,4 +58,13 @@ CREATE TABLE IF NOT EXISTS RecordDetail (
     tags TEXT,
     FOREIGN KEY (uuid) REFERENCES GameRecords(uuid),
     UNIQUE (uuid, user_id)
+);
+-- 团队赛队伍
+CREATE TABLE IF NOT EXISTS TeamMembers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    contest_id INTEGER NOT NULL,
+    team_id INTEGER NOT NULL,
+    team_name TEXT NOT NULL,
+    user_no INTEGER NOT NULL,
+    username TEXT NOT NULL
 );
