@@ -107,9 +107,9 @@ const TeamStatistics = () => {
                 rank: index + 1,
                 ttl_accuracy_diff: index === 0 ? 0
                     : ((res.data[index - 1].ttl_accuracy || 0) - (team.ttl_accuracy || 0)),
-                ttl_accuracy_elim: index >= Math.floor(res.data.length / 2)
-                    ? (team.ttl_accuracy || 0) - (res.data[Math.floor(res.data.length / 2) + 1]?.ttl_accuracy || 0)
-                    : (team.ttl_accuracy || 0) - (res.data[Math.floor(res.data.length / 2)]?.ttl_accuracy || 0),
+                ttl_accuracy_elim: index < Math.floor(res.data.length / 2)
+                    ? (team.ttl_accuracy || 0) - (res.data[Math.floor(res.data.length / 2)]?.ttl_accuracy || 0)
+                    : (team.ttl_accuracy || 0) - (res.data[Math.floor(res.data.length / 2) - 1]?.ttl_accuracy || 0),
             })));
             setLoading(false);
         });
@@ -117,7 +117,12 @@ const TeamStatistics = () => {
 
     return (
         <>
-            <Table columns={columns} dataSource={teams} loading={loading} rowKey="team_id" />
+            <Table columns={columns} dataSource={teams} loading={loading} rowKey="team_id"
+                pagination={
+                    {
+                        defaultPageSize: 20,
+                    }
+                } />
         </>
     )
 }
