@@ -68,7 +68,8 @@ const columns = [
         dataIndex: 'team_name',
         key: 'team_name',
         align: 'center' as AlignType,
-        render: (text: string, record: PlayerData) => (<div style={{ background: perset_color[record.team_id - 1] }}>{text}</div>),
+        render: (text: string, record: PlayerData) => <div style={{ background: perset_color[record.team_id - 1] }}>{text}</div>,
+        sorter: (a: PlayerData, b: PlayerData) => a.team_id - b.team_id,
     },
     {
         title: '玩家昵称',

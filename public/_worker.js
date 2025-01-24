@@ -214,12 +214,13 @@ LEFT JOIN \
 	AND RecordDetail.uuid = GameRecords.uuid \
 WHERE \
 	TeamMembers.contest_id = ? \
+	AND GameRecords.schedule = ? \
 GROUP BY \
     TeamMembers.team_id, TeamMembers.team_name \
 ORDER BY \
     ttl_accuracy DESC;\
 		")
-		.bind(contestId)
+		.bind(contestId, schedule)
 		.all();
 	return records.results;
 }

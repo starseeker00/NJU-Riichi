@@ -3,6 +3,7 @@ import { FloatButton, Layout, Menu, theme } from 'antd';
 import { Link, Outlet, useLocation, useNavigate } from 'umi';
 import routes from '../../config/routes';
 import './index.less';
+import LoginButton from '@/components/login';
 
 const { Header, Content, Footer } = Layout;
 
@@ -31,6 +32,7 @@ const AppLayout: React.FC = () => {
           }
           style={{ flex: 1, minWidth: 0 }}
         />
+        <LoginButton />
       </Header>
       <Content style={{ marginTop: 32, padding: '0 48px' }}>
         <div
