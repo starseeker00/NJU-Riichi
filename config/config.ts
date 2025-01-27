@@ -13,14 +13,14 @@ export default defineConfig({
       target: 'http://localhost:8787',
     },
   },
-  headScripts: [
-    {
-      // Cloudflare Web Analytics
-      src: 'https://static.cloudflareinsights.com/beacon.min.js',
-      defer: true,
-      'data-cf-beacon': '{"token": "86d141fbf6dc45ecb2530505f7110c11"}',
-    },
-  ],
+  // headScripts: [
+  //   {
+  //     // Cloudflare Web Analytics
+  //     src: 'https://static.cloudflareinsights.com/beacon.min.js',
+  //     defer: true,
+  //     'data-cf-beacon': '{"token": "86d141fbf6dc45ecb2530505f7110c11"}',
+  //   },
+  // ],
   metas: [
     {
       name: 'description',

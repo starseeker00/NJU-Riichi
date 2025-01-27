@@ -22,6 +22,7 @@
     "antd": "^5.19.1",
     "axios": "^1.7.2",
     "echarts": "^5.5.1",
+    "html2canvas": "^1.4.1",
     "umi": "^4.3.1"
   },
   "devDependencies": {

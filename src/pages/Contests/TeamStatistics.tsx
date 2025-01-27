@@ -1,9 +1,11 @@
 
 import { perset_color } from "@/const";
 import { getContestTeams } from "@/services/api";
-import { Table } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import { Button, Space, Table, Tooltip } from "antd";
+import html2canvas from "html2canvas";
 import { AlignType } from "rc-table/lib/interface";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "umi";
 
 interface TeamData {
@@ -115,14 +117,35 @@ const TeamStatistics = () => {
         });
     }, [params.id]);
 
+    const tableRef = useRef<HTMLDivElement>(null);
+
+    function downloadImg() {
+        console.log(tableRef.current);
+        html2canvas(tableRef.current as HTMLElement).then((canvas) => {
+            const a = document.createElement('a');
+            a.href = canvas.toDataURL('image/png');
+            a.download = 'table.png';
+            a.click();
+        });
+    }
+
     return (
         <>
-            <Table columns={columns} dataSource={teams} loading={loading} rowKey="team_id"
-                pagination={
-                    {
-                        defaultPageSize: 20,
-                    }
-                } />
+            <Space style={{ position: 'absolute', top: 16, right: 0 }}>
+                <Tooltip title="导出图片 (png)">
+                    <Button icon={<DownloadOutlined />} size="small" onClick={downloadImg} />
+                </Tooltip>
+            </Space>
+            <div ref={tableRef}>
+                <Table
+                    columns={columns} dataSource={teams} loading={loading} rowKey="team_id"
+                    pagination={
+                        {
+                            defaultPageSize: 20,
+                            hideOnSinglePage: true,
+                        }
+                    } />
+            </div>
         </>
     )
 }

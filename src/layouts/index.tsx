@@ -34,7 +34,7 @@ const AppLayout: React.FC = () => {
         />
         <LoginButton />
       </Header>
-      <Content style={{ marginTop: 32, padding: '0 48px' }}>
+      <Content>
         <div
           style={{
             background: colorBgContainer,

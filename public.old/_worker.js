@@ -218,7 +218,7 @@ WHERE \
 GROUP BY \
     TeamMembers.team_id, TeamMembers.team_name \
 ORDER BY \
-    ttl_accuracy DESC;\
+    ttl_accuracy DESC\
 		")
 		.bind(contestId, schedule)
 		.all();

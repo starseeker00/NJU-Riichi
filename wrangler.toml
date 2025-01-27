@@ -1,9 +1,14 @@
 name = "nju-riichi"
 compatibility_date = "2024-07-18"
 
-# main = "public/_worker.js"
-pages_build_output_dir = "./dist"
+# main = "public/_worker.js" # The Worker script
+pages_build_output_dir = "./dist" # The Pages script
 
-d1_databases = [
-    { binding = "DB", database_name = "majsoul", database_id = "a72efb8c-5002-4ca9-b6f6-6f096570d114" },
-]
+[[d1_databases]]
+binding = "DB"
+database_name = "majsoul"
+database_id = "a72efb8c-5002-4ca9-b6f6-6f096570d114"
+
+[[services]]
+binding = "MY_SERVICE"
+service = "maj"

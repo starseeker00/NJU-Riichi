@@ -5,15 +5,20 @@ DROP TABLE IF EXISTS Contests;
 -- 赛事列表
 CREATE TABLE IF NOT EXISTS Contests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    contest_short_id INTEGER NOT NULL DEFAULT 0,
     contest_id INTEGER NOT NULL UNIQUE,
     name TEXT NOT NULL,
     nickname TEXT,
     description TEXT NOT NULL,
     start_time TIMESTAMP NOT NULL,
     finish_time TIMESTAMP NOT NULL,
-    game_mode INTEGER NOT NULL, -- 2: 四麻, 12: 三麻
-    game_property INTEGER NOT NULL DEFAULT 0, -- 比赛性质 0: 默认, 1: 团体赛
-    rule INTEGER NOT NULL DEFAULT 0 -- 计分规则
+    game_mode INTEGER NOT NULL,
+    -- 2: 四麻, 12: 三麻
+    game_property INTEGER NOT NULL DEFAULT 0,
+    -- 比赛性质 0: 默认, 1: 团体赛
+    rule INTEGER NOT NULL DEFAULT 0,
+    -- 计分规则
+    last_update TIMESTAMP NOT NULL DEFAULT 0,
 );
 -- 牌谱记录
 CREATE TABLE IF NOT EXISTS GameRecords (

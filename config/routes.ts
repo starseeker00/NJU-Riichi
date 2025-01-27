@@ -27,6 +27,10 @@ const routes = [
             {
                 path: "/contests/:id/records",
                 component: "Contests/GameRecords"
+            },
+            {
+                path: "/contests/:id/schedule",
+                component: "Contests/GameSchedule"
             }
         ]
     },

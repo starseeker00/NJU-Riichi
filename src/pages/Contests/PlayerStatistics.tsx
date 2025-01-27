@@ -1,10 +1,12 @@
 import { getContestPlayers } from "@/services/api";
-import { Button, Checkbox, Popover, Space, Table, Tooltip } from "antd";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Button, Checkbox, Dropdown, Popover, Space, Table, Tooltip } from "antd";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useOutletContext, useParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
 import { DownloadOutlined, FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
 import { perset_color } from "@/const";
+import html2canvas from "html2canvas";
+import DropdownButton from "antd/es/dropdown/dropdown-button";
 
 interface PlayerData {
     team_id: number;
@@ -70,6 +72,7 @@ const columns = [
         align: 'center' as AlignType,
         render: (text: string, record: PlayerData) => <div style={{ background: perset_color[record.team_id - 1] }}>{text}</div>,
         sorter: (a: PlayerData, b: PlayerData) => a.team_id - b.team_id,
+        showSorterTooltip: false,
     },
     {
         title: '玩家昵称',
@@ -326,6 +329,18 @@ const PlayerStatistics = () => {
     const [open, setOpen] = useState(false);
     const [selectedColumns, setSelectedColumns] = useState<string[]>(defaultColumns);
 
+    const tableRef = useRef<HTMLDivElement>(null);
+
+    function downloadImg() {
+        console.log(tableRef.current);
+        html2canvas(tableRef.current as HTMLElement).then((canvas) => {
+            const a = document.createElement('a');
+            a.href = canvas.toDataURL('image/png');
+            a.download = 'table.png';
+            a.click();
+        });
+    }
+
     return (
         <>
             <Space style={{ position: 'absolute', top: 16, right: 0 }}>
@@ -347,42 +362,51 @@ const PlayerStatistics = () => {
                         size="small"
                     ></Button>
                 </Popover>
-                <Tooltip title="导出数据 (csv)">
-                    <Button icon={<DownloadOutlined />} size="small" onClick={downloadData} />
-                </Tooltip>
+                <Dropdown
+                    menu={{
+                        items: [
+                            { key: '1', label: '导出图片 (png)', onClick: downloadImg },
+                            { key: '2', label: '导出数据 (csv)', onClick: downloadData },
+                        ]
+                    }}
+                >
+                    <Button icon={<DownloadOutlined />} size="small" />
+                </Dropdown>
             </Space>
-            <Table
-                loading={loading}
-                dataSource={playerData}
-                columns={columns
-                    .map(column => {
-                        switch (column.key) {
-                            case 'rule_accuracy':
-                                return {
-                                    ...column,
-                                    title: (
-                                        <span>
-                                            {column.title}
-                                            {infoTooltip({ title: ruleMap[rule] })}
-                                        </span>
-                                    ),
-                                    hidden: !rule,
-                                };
-                            case 'team_name':
-                                return {
-                                    ...column,
-                                    hidden: game_property !== 1,
-                                };
-                            default:
-                                return {
-                                    ...column,
-                                    hidden: options.map(option => option.value).includes(column.key)
-                                        && !selectedColumns.includes(column.key)
-                                };
-                        }
-                    })
-                }
-            />
+            <div ref={tableRef}>
+                <Table
+                    loading={loading}
+                    dataSource={playerData}
+                    columns={columns
+                        .map(column => {
+                            switch (column.key) {
+                                case 'rule_accuracy':
+                                    return {
+                                        ...column,
+                                        title: (
+                                            <span>
+                                                {column.title}
+                                                {infoTooltip({ title: ruleMap[rule] })}
+                                            </span>
+                                        ),
+                                        hidden: !rule,
+                                    };
+                                case 'team_name':
+                                    return {
+                                        ...column,
+                                        hidden: game_property !== 1,
+                                    };
+                                default:
+                                    return {
+                                        ...column,
+                                        hidden: options.map(option => option.value).includes(column.key)
+                                            && !selectedColumns.includes(column.key)
+                                    };
+                            }
+                        })
+                    }
+                />
+            </div>
         </>
     )
 }

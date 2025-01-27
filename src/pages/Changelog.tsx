@@ -83,11 +83,17 @@ const log = {
         '玩家统计中支持按照队伍进行排序和查看',
         '单点登录功能（beta）',
     ],
+    '2025-01-27': [
+        '调整了赛事界面的样式',
+        '添加了赛事赛程页面，管理员可以进行编辑（beta）',
+        '赛事现在每小时自动更新数据，并且管理员可以在赛事页面手动更新数据（beta）',
+        '怎么有人年二十八了还在写代码啊/(ㄒoㄒ)/~~',
+    ],
 }
 
 const Changelog = () => {
     return (
-        <div>
+        <div style={{ marginTop: 32, padding: '0 48px' }}>
             <h1>更新日志</h1>
             <ul>
                 {Object.entries(log).reverse()
