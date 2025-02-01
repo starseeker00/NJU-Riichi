@@ -10,5 +10,5 @@ database_name = "majsoul"
 database_id = "a72efb8c-5002-4ca9-b6f6-6f096570d114"
 
 [[services]]
-binding = "MY_SERVICE"
+binding = "SERVICE"
 service = "maj"

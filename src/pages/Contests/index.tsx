@@ -1,12 +1,12 @@
 import { StatisticTabType } from "@/const";
-import { getContests } from "@/services/api";
+import { getContests, updateContest } from "@/services/api";
+import { checkScope, wrapScope } from "@/util/auth";
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ReloadOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Layout, Menu, Modal, Space, Spin, Tag, theme, Tooltip } from "antd";
 import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { MenuItemGroupType } from "antd/es/menu/interface";
-import { number } from "echarts/core";
 import { useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "umi";
 
@@ -24,6 +24,7 @@ interface Contest {
   rule: number;
   description: string;
   last_update: number;
+  divide_equally: number;
 }
 
 const ContestPage = () => {
@@ -31,13 +32,26 @@ const ContestPage = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const [couldUpdate, setCouldUpdate] = useState(false);
+  const [token, setToken] = useState<string>('');
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      const scope = 'update:contest';
+      getAccessTokenSilently(wrapScope(scope)).then((token) => {
+        const couldUpdate = checkScope(token, scope);
+        setCouldUpdate(couldUpdate);
+        setToken(token);
+      });
+    }
+  }, [isAuthenticated]);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const [contests, setContests] = useState<Contest[]>([]);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   useEffect(() => {
     getContests().then((res) => {
@@ -121,6 +135,7 @@ const ContestPage = () => {
 
   const [contestId, setContestId] = useState(0);
   const [tab, setTab] = useState<StatisticTabType>('players');
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     // console.log(location.pathname);
@@ -192,6 +207,10 @@ const ContestPage = () => {
                     <span style={{ color: 'gray' }}>比赛性质：</span>
                     <Tag color="blue">{selectedContest?.game_property === 0 ? '个人赛' : '团体赛'}</Tag>
                   </div>
+                  <div>
+                    <span style={{ color: 'gray' }}>同分是否平分顺位马：</span>
+                    <Tag color="blue">{selectedContest?.divide_equally === 0 ? '否' : '是'}</Tag>
+                  </div>
                 </Space>
               </Modal>
               <p>{selectedContest?.description}</p>
@@ -200,7 +219,20 @@ const ContestPage = () => {
                   <Button
                     type="dashed"
                     icon={<ReloadOutlined />}
-                    disabled={!isAuthenticated || user?.name !== 'starseeker'}
+                    disabled={!couldUpdate}
+                    loading={updating}
+                    onClick={() => {
+                      setUpdating(true);
+                      updateContest(contestId, token)
+                        .then(() => {
+                          Modal.success({ content: '更新成功' });
+                          setUpdating(false);
+                        })
+                        .catch(() => {
+                          Modal.error({ content: '更新失败' });
+                          setUpdating(false);
+                        });
+                    }}
                   >更新数据</Button>
                 </div>
                 <div style={{ color: 'gray' }}>

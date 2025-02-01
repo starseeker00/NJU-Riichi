@@ -4,6 +4,7 @@ import { Button, Form, Input, InputNumber, Popconfirm, Select, Table, Typography
 import { addSchedule, deleteSchedule, getSchedule, updateSchedule } from '@/services/schedule';
 import { useParams } from 'umi';
 import { useAuth0 } from '@auth0/auth0-react';
+import { checkScope, wrapScope } from '@/util/auth';
 
 interface DataType {
     key: string;
@@ -64,7 +65,20 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 const GameSchedule: React.FC = () => {
-    const { user, isAuthenticated } = useAuth0();
+    const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const [couldUpdate, setCouldUpdate] = useState(false);
+    const [token, setToken] = useState<string>('');
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            const scope = 'update:contest';
+            getAccessTokenSilently(wrapScope(scope)).then((token) => {
+                const couldUpdate = checkScope(token, scope);
+                setCouldUpdate(couldUpdate);
+                setToken(token);
+            });
+        }
+    }, [isAuthenticated]);
 
     const [form] = Form.useForm();
     const [data, setData] = useState<DataType[]>([]);
@@ -106,9 +120,9 @@ const GameSchedule: React.FC = () => {
                 await addSchedule({
                     ...row,
                     contest_id: Number(params.id),
-                });
+                }, token);
             } else {
-                await updateSchedule({ ...row, id: key });
+                await updateSchedule({ ...row, id: key }, token);
             }
             setEditingKey('');
 
@@ -124,7 +138,7 @@ const GameSchedule: React.FC = () => {
 
     const remove = async (key: React.Key) => {
         setLoading(true);
-        await deleteSchedule(Number(key));
+        await deleteSchedule(Number(key), token);
         await getSchedule(Number(params.id)).then((res) => {
             setData(res.data.map((item: any) => ({ ...item, key: item.id.toString() })));
             setLoading(false);
@@ -222,9 +236,7 @@ const GameSchedule: React.FC = () => {
             <Button
                 style={{ position: 'absolute', top: 0, right: 0, margin: 8 }}
                 type="link"
-                disabled={editingKey !== '' ||
-                    !isAuthenticated || user?.name !== 'starseeker'
-                }
+                disabled={editingKey !== '' || !couldUpdate}
                 onClick={() => {
                     setData([{ key: 'new', time_point: new Date(), description: '', property: 0 }, ...data]);
                     edit({ key: 'new', time_point: undefined, description: '', property: 0 });

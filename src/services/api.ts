@@ -23,3 +23,11 @@ export function getRecordDetail(uuid: string) {
 export function getContestTeams(contestId: number) {
     return axios.get(`/api/getContestTeamList?contestId=${contestId}`);
 }
+
+export function updateContest(contest_id: number, token: string) {
+    return axios.post('/api/updateContest', { contest_id }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
