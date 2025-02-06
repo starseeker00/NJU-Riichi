@@ -40,6 +40,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
                         <Select.Option value={0}>自由匹配（牌谱不计入统计）</Select.Option>
                         <Select.Option value={1}>初赛/常规赛（牌谱单独计入统计）</Select.Option>
                         <Select.Option value={2}>复赛/季后赛（牌谱单独计入统计）</Select.Option>
+                        <Select.Option value={3}>决赛（牌谱单独计入统计）</Select.Option>
                     </Select> : null;
 
     return (
@@ -170,6 +171,8 @@ const GameSchedule: React.FC = () => {
                         return '初赛/常规赛';
                     case 2:
                         return '复赛/季后赛';
+                    case 3:
+                        return '决赛';
                     default:
                         return '未知';
                 }

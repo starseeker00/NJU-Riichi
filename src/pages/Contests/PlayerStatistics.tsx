@@ -1,12 +1,11 @@
 import { getContestPlayers } from "@/services/api";
-import { Button, Checkbox, Dropdown, Popover, Space, Table, Tooltip } from "antd";
+import { Button, Checkbox, Collapse, Dropdown, Popover, Space, Table, Tooltip } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useOutletContext, useParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
 import { DownloadOutlined, FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
 import { perset_color } from "@/const";
 import html2canvas from "html2canvas";
-import DropdownButton from "antd/es/dropdown/dropdown-button";
 
 interface PlayerData {
     team_id: number;
@@ -216,7 +215,7 @@ const columns = [
         showSorterTooltip: false,
     },
     {
-        title: '中裏',
+        title: '中里',
         dataIndex: 'pct_ura',
         key: 'pct_ura',
         align: 'center' as AlignType,
@@ -256,58 +255,25 @@ const defaultColumns = columns
     .map(({ key }) => key);
 
 
-const PlayerStatistics = () => {
+const PlayerStatisticsTable = ({ schedule = 1 }) => {
     const [loading, setLoading] = useState(true);
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
     const params = useParams<{ id: string }>();
-    const { game_mode, game_property, rule } = useOutletContext<{ game_mode: number, game_property: number, rule: number }>();
+    const { game_property, rule } = useOutletContext<{ game_property: number, rule: number }>();
 
     useEffect(() => {
         setLoading(true);
-        getContestPlayers(Number(params.id)).then(res => {
+        getContestPlayers(Number(params.id), schedule).then(res => {
             setPlayers(res.data);
             setLoading(false);
         })
-    }, [params.id]);
-
-    const playerData = useMemo(() => {
-        return players
-            .map((player: any) => ({
-                ...player,
-                key: player.user_id,
-                rank_list: player.rank_list.split(',').map(Number).slice(0, 10).reverse(),
-                rule_accuracy: calc_rule_accuracy(player.accuracy_list.split(',').map(Number), rule),
-                game_mode,
-            }))
-            .sort((a: PlayerData, b: PlayerData) => b.rule_accuracy - a.rule_accuracy)
-            .map((player: PlayerData, index: number) => ({
-                ...player,
-                rank: index + 1
-            }))
-    }, [players, game_mode, rule]);
-
-    function calc_rule_accuracy(accuracyList: number[], rule: number) {
-        if (rule >= 12) {
-            const len = rule - 10;
-            let max = -Infinity;
-            for (let i = 0; i <= accuracyList.length - len; i++) {
-                max = Math.max(max, accuracyList.slice(i, i + len).reduce((a, b) => a + b, 0));
-            }
-            return max;
-        } else if (rule === 1) {
-            return accuracyList.length >= 3 ? accuracyList.slice(0, 3).reduce((a, b) => a + b, 0) : -Infinity;
-        } else if (rule === 2) {
-            return accuracyList.length >= 5 ? accuracyList.slice(0, 5).reduce((a, b) => a + b, 0) : -Infinity;
-        } else {
-            return -Infinity;
-        }
-    };
+    }, [params.id, schedule]);
 
     const downloadData = useCallback(() => {
         const title = columns.map(column => column.title);
         const dataIndex = columns.map(column => column.dataIndex);
-        const data = playerData.map(player => {
+        const data = players.map(player => {
             return dataIndex.map(key => {
                 const cell = player[key as keyof PlayerData]
                 return Array.isArray(cell) ? cell.join(' ') : cell;
@@ -324,7 +290,7 @@ const PlayerStatistics = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }, [playerData]);
+    }, [players]);
 
     const [open, setOpen] = useState(false);
     const [selectedColumns, setSelectedColumns] = useState<string[]>(defaultColumns);
@@ -376,7 +342,7 @@ const PlayerStatistics = () => {
             <div ref={tableRef}>
                 <Table
                     loading={loading}
-                    dataSource={playerData}
+                    dataSource={players}
                     columns={columns
                         .map(column => {
                             switch (column.key) {
@@ -409,6 +375,37 @@ const PlayerStatistics = () => {
             </div>
         </>
     )
+}
+
+const PlayerStatistics = () => {
+
+    const { game_property } = useOutletContext<{ game_property: number }>();
+
+    useEffect(() => {
+        console.log(game_property);
+    }, [game_property]);
+
+    const items = [
+        {
+            key: '1',
+            label: '常规赛',
+            children: <PlayerStatisticsTable schedule={1} />
+        },
+        {
+            key: '2',
+            label: '季后赛',
+            children: <PlayerStatisticsTable schedule={2} />
+        },
+        {
+            key: '3',
+            label: '决赛',
+            children: <PlayerStatisticsTable schedule={3} />
+        }
+    ]
+
+    return game_property
+        ? <Collapse accordion items={items} />
+        : <PlayerStatisticsTable />
 }
 
 export default PlayerStatistics;

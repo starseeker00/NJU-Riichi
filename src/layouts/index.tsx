@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'umi';
 import routes from '../../config/routes';
 import './index.less';
 import LoginButton from '@/components/login';
+import SupportButton from '@/components/support';
 
 const { Header, Content, Footer } = Layout;
 
@@ -32,6 +33,7 @@ const AppLayout: React.FC = () => {
           }
           style={{ flex: 1, minWidth: 0 }}
         />
+        <SupportButton style={{ marginRight: 16 }} />
         <LoginButton />
       </Header>
       <Content>

@@ -269,7 +269,6 @@ const ContestPage = () => {
               <Outlet context={{
                 game_mode: selectedContest?.game_mode,
                 game_property: selectedContest?.game_property,
-                rule: selectedContest?.rule
               }} />
             </div>
           </Content>

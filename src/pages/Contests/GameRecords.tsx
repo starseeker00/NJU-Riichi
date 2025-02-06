@@ -36,7 +36,7 @@ const GameRecords = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<RecordBasic[]>([]);
     const [mode, setMode] = useState<'seat' | 'rank'>('rank');
-    const { game_mode } = useOutletContext<{ game_mode: number, rule: number }>();
+    const { game_mode } = useOutletContext<{ game_mode: number }>();
 
     const params = useParams<{ id: string }>();
     const [searchParams, setSearchParams] = useSearchParams({ page: '1', pageSize: '10', search: '' });

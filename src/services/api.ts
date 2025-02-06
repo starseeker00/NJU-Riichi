@@ -4,8 +4,8 @@ export function getContests() {
     return axios.get('/api/getContestList');
 }
 
-export function getContestPlayers(contestId: number) {
-    return axios.get(`/api/getContestPlayerList?contestId=${contestId}`);
+export function getContestPlayers(contestId: number, schedule: number) {
+    return axios.get(`/api/getContestPlayerList?contestId=${contestId}&schedule=${schedule}`);
 }
 
 export function getContestRecords(contestId: number) {
