@@ -17,7 +17,8 @@ const AppLayout: React.FC = () => {
   // console.log(location);
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: '100vh', position: 'relative' }}>
+      <div className='bg' />
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div className="demo-logo" />
         <Menu
@@ -39,10 +40,11 @@ const AppLayout: React.FC = () => {
       <Content>
         <div
           style={{
-            background: colorBgContainer,
+            // background: colorBgContainer,
             minHeight: 280,
             padding: 24,
             borderRadius: borderRadiusLG,
+            position: 'relative',
           }}
         >
           <Outlet />

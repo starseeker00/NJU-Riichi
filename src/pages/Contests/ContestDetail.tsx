@@ -149,14 +149,14 @@ const ContestDetail = () => {
           collapsedWidth={0}
           trigger={
             collapsed ?
-              <Button size="small"
+              <Button size="large"
                 icon={<UnorderedListOutlined />}
-                style={{ writingMode: 'vertical-lr', height: 90 }}
+                style={{ writingMode: 'vertical-lr' }}
               >赛事列表</Button>
-              : <Button size="small" icon={<MenuFoldOutlined />} />
+              : <Button icon={<MenuFoldOutlined />} />
           }
           zeroWidthTriggerStyle={
-            collapsed ? { right: 0, height: 100 } : { right: 0, top: 0 }
+            collapsed ? { right: -15, top: 400, height: 120 } : { right: 5, top: 5 }
           }
         >
           <Menu
@@ -167,7 +167,7 @@ const ContestDetail = () => {
           />
         </Sider>
         {contests.length > 0 &&
-          <Content style={{ paddingLeft: 24, minHeight: 280 }}>
+          <Content style={{ padding: '0 24px', minHeight: 280 }}>
             <div style={{ position: 'relative', minHeight: 50 }}>
               <h2>
                 {selectedContest?.name}
