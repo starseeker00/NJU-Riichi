@@ -15,6 +15,11 @@ const routes = [
         path: "/contests",
         component: "Contests",
         nav: true,
+    },
+    {
+        title: '赛事',
+        path: "/contests/:id",
+        component: "Contests/ContestDetail",
         routes: [
             {
                 path: "/contests/:id/players",

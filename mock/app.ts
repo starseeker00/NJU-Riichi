@@ -1,545 +1,119 @@
 export default {
     'GET /api/getContestList': [
         {
-            id: 1,
-            contestId: 233,
-            name: '第12届南京大学立直一发自摸里三杯麻将联赛个人赛',
-            nickName: 'Summer - NJU里三杯 12th',
-            startTime: 1723132800,
-            endTime: 1735689600,
+            "id": 27,
+            "contest_id": 18233201,
+            "name": "第12届NJU立直一发自摸里三杯个人赛",
+            "nickname": "【正赛】NJU里三杯12th",
+            "description": "",
+            "start_time": 1723206270,
+            "finish_time": 1726416000,
+            "rule": 14,
+            "game_mode": 2,
+            "game_property": 0,
+            "last_update": 0,
+            "contest_short_id": "253826",
+            "watching": 0,
+            "divide_equally": 0
         },
         {
-            id: 3,
-            contestId: 1,
-            name: 'testtest',
-            nickName: 'test',
-            startTime: 1721404800,
-            endTime: 1723132800,
-            description: '还没有数据（训练场的也无，这里用四象战的数据做测试）',
-        },
-    ],
-    'GET /api/getGameRecordListByPage': [
-        {
-            "uuid": "240629-a2561f9e-f53d-4a23-98b3-2788ff7d947f",
-            "time": 1719678384,
-            "score": [
-                {
-                    "nickname": "宽恕者茴香",
-                    "seat": 0,
-                    "point": 6700
-                },
-                {
-                    "nickname": "有一点迷茫",
-                    "seat": 1,
-                    "point": 37500
-                },
-                {
-                    "nickname": "蕉蕉蕉666",
-                    "seat": 2,
-                    "point": 50100
-                },
-                {
-                    "nickname": "園城寺丶怜",
-                    "seat": 3,
-                    "point": 5700
-                }
-            ]
+            "id": 28,
+            "contest_id": 16585016,
+            "name": "第12届NJU麻将联赛训练场",
+            "nickname": "【训练场】里三杯12th",
+            "description": "本比赛场是第12届NJU麻将联赛(个人赛)【训练用】比赛场，仅用于模拟比赛。\n请各位群友参与比赛时注意不要在此进行比赛准备，以免错过正式比赛！\n",
+            "start_time": 1720522800,
+            "finish_time": 1725185669,
+            "rule": 1,
+            "game_mode": 2,
+            "game_property": 0,
+            "last_update": 0,
+            "contest_short_id": "971695",
+            "watching": 0,
+            "divide_equally": 0
         },
         {
-            "uuid": "240629-ac5fa650-314d-4ab8-84d5-a3e9de6e6f6d",
-            "time": 1719678353,
-            "score": [
-                {
-                    "nickname": "拍泡泡",
-                    "seat": 0,
-                    "point": 1200
-                },
-                {
-                    "nickname": "若葉こはく",
-                    "seat": 1,
-                    "point": 16100
-                },
-                {
-                    "nickname": "米米",
-                    "seat": 2,
-                    "point": 65400
-                },
-                {
-                    "nickname": "无法回避的厄运",
-                    "seat": 3,
-                    "point": 17300
-                }
-            ]
+            "id": 30,
+            "contest_id": 43750978,
+            "name": "三麻下头之王争霸赛",
+            "nickname": "【三麻】决战下头之巅",
+            "description": "",
+            "start_time": 1726660920,
+            "finish_time": 1758196860,
+            "rule": 2,
+            "game_mode": 12,
+            "game_property": 0,
+            "last_update": 1739854854792,
+            "contest_short_id": "130289",
+            "watching": 1,
+            "divide_equally": 0
         },
         {
-            "uuid": "240629-ef2ee446-af06-4f38-97cd-d0a7c18f202e",
-            "time": 1719678271,
-            "score": [
-                {
-                    "nickname": "xlww",
-                    "seat": 0,
-                    "point": 46700
-                },
-                {
-                    "nickname": "~iris~",
-                    "seat": 1,
-                    "point": 25100
-                },
-                {
-                    "nickname": "喀斯特那抹蓝",
-                    "seat": 2,
-                    "point": 5000
-                },
-                {
-                    "nickname": "正义一番胡",
-                    "seat": 3,
-                    "point": 23200
-                }
-            ]
+            "id": 31,
+            "contest_id": 5258982,
+            "name": "NJU M规四麻正直比赛",
+            "nickname": "【四麻】决战正直之巅",
+            "description": "",
+            "start_time": 1726742700,
+            "finish_time": 1758191940,
+            "rule": 15,
+            "game_mode": 2,
+            "game_property": 0,
+            "last_update": 1739854857376,
+            "contest_short_id": "942116",
+            "watching": 1,
+            "divide_equally": 0
         },
         {
-            "uuid": "240629-dd48205d-df64-452c-acaa-8f6dc8d98985",
-            "time": 1719678261,
-            "score": [
-                {
-                    "nickname": "边听歌边玩",
-                    "seat": 0,
-                    "point": 25400
-                },
-                {
-                    "nickname": "珊瑚瑚",
-                    "seat": 1,
-                    "point": 29700
-                },
-                {
-                    "nickname": "于是郎和",
-                    "seat": 2,
-                    "point": -800
-                },
-                {
-                    "nickname": "未来的约定之时",
-                    "seat": 3,
-                    "point": 45700
-                }
-            ]
+            "id": 34,
+            "contest_id": 51623775,
+            "name": "第13届NJU里三杯团体赛训练场",
+            "nickname": "第13届NJU里三杯团体赛训练场",
+            "description": "",
+            "start_time": 1736087590,
+            "finish_time": 1740839590,
+            "rule": 2,
+            "game_mode": 2,
+            "game_property": 0,
+            "last_update": 1739854859950,
+            "contest_short_id": "908924",
+            "watching": 1,
+            "divide_equally": 1
         },
         {
-            "uuid": "240629-2107f683-e8b8-4df6-ac13-bb00ed76981c",
-            "time": 1719677739,
-            "score": [
-                {
-                    "nickname": "我战无不胜",
-                    "seat": 0,
-                    "point": 38400
-                },
-                {
-                    "nickname": "悠家小兔",
-                    "seat": 1,
-                    "point": 19300
-                },
-                {
-                    "nickname": "海上幻想师",
-                    "seat": 2,
-                    "point": 42600
-                },
-                {
-                    "nickname": "眉清目秀牛",
-                    "seat": 3,
-                    "point": -300
-                }
-            ]
+            "id": 35,
+            "contest_id": 72716785,
+            "name": "第13届NJU立直一发自摸里三杯麻将联赛团队赛",
+            "nickname": "【团队赛】里三杯13th",
+            "description": "",
+            "start_time": 1736006634,
+            "finish_time": 1745942634,
+            "rule": 0,
+            "game_mode": 2,
+            "game_property": 1,
+            "last_update": 1739854862607,
+            "contest_short_id": "337814",
+            "watching": 1,
+            "divide_equally": 1
         },
         {
-            "uuid": "240629-c1eb0462-bec7-4997-b45c-a1d08b0f6e1a",
-            "time": 1719677342,
-            "score": [
-                {
-                    "nickname": "lhylllll",
-                    "seat": 0,
-                    "point": 50600
-                },
-                {
-                    "nickname": "夜雨璇",
-                    "seat": 1,
-                    "point": 9900
-                },
-                {
-                    "nickname": "果断直接白给",
-                    "seat": 2,
-                    "point": 8000
-                },
-                {
-                    "nickname": "混沌恶",
-                    "seat": 3,
-                    "point": 31500
-                }
-            ]
-        },
-        {
-            "uuid": "240629-14e84365-69d9-4ee0-baab-8d5136a3e679",
-            "time": 1719677054,
-            "score": [
-                {
-                    "nickname": "偉布拉特",
-                    "seat": 0,
-                    "point": 32100
-                },
-                {
-                    "nickname": "散情情情情",
-                    "seat": 1,
-                    "point": 32100
-                },
-                {
-                    "nickname": "Leoooooooo",
-                    "seat": 2,
-                    "point": 10300
-                },
-                {
-                    "nickname": "反扑QAQ",
-                    "seat": 3,
-                    "point": 25500
-                }
-            ]
-        },
-        {
-            "uuid": "240629-6c67efde-9fe5-461d-ae74-c2aac9570512",
-            "time": 1719676843,
-            "score": [
-                {
-                    "nickname": "Together丶",
-                    "seat": 0,
-                    "point": 20800
-                },
-                {
-                    "nickname": "痴呆镜小To",
-                    "seat": 1,
-                    "point": 52500
-                },
-                {
-                    "nickname": "我还不跟你急",
-                    "seat": 2,
-                    "point": 29300
-                },
-                {
-                    "nickname": "泷川爱花",
-                    "seat": 3,
-                    "point": -2600
-                }
-            ]
-        },
-        {
-            "uuid": "240629-0e6b9d73-ff4e-406e-a516-2273ae4778e2",
-            "time": 1719676580,
-            "score": [
-                {
-                    "nickname": "听慢歌",
-                    "seat": 0,
-                    "point": 38700
-                },
-                {
-                    "nickname": "赤井",
-                    "seat": 1,
-                    "point": 23200
-                },
-                {
-                    "nickname": "未来的约定之时",
-                    "seat": 2,
-                    "point": 31200
-                },
-                {
-                    "nickname": "珊瑚瑚",
-                    "seat": 3,
-                    "point": 6900
-                }
-            ]
-        },
-        {
-            "uuid": "240629-e45423f5-b512-4ca3-b18c-2f3c0bf219e6",
-            "time": 1719676469,
-            "score": [
-                {
-                    "nickname": "赵小垂",
-                    "seat": 0,
-                    "point": 21500
-                },
-                {
-                    "nickname": "悠家小兔",
-                    "seat": 1,
-                    "point": 31500
-                },
-                {
-                    "nickname": "孽力回馈",
-                    "seat": 2,
-                    "point": 13200
-                },
-                {
-                    "nickname": "我战无不胜",
-                    "seat": 3,
-                    "point": 33800
-                }
-            ]
-        },
-        {
-            "uuid": "240629-e5a2bf46-7661-468c-9095-339700a1a8ff",
-            "time": 1719676225,
-            "score": [
-                {
-                    "nickname": "眉清目秀牛",
-                    "seat": 0,
-                    "point": 24500
-                },
-                {
-                    "nickname": "麻将陷阱",
-                    "seat": 1,
-                    "point": -2500
-                },
-                {
-                    "nickname": "萧瑟鲜贝",
-                    "seat": 2,
-                    "point": 54000
-                },
-                {
-                    "nickname": "園城寺丶怜",
-                    "seat": 3,
-                    "point": 24000
-                }
-            ]
-        },
-        {
-            "uuid": "240629-d0bfcb93-80fd-4338-98da-ea48479ef350",
-            "time": 1719676133,
-            "score": [
-                {
-                    "nickname": "拍泡泡",
-                    "seat": 0,
-                    "point": 22700
-                },
-                {
-                    "nickname": "若葉こはく",
-                    "seat": 1,
-                    "point": 45900
-                },
-                {
-                    "nickname": "水望",
-                    "seat": 2,
-                    "point": 9200
-                },
-                {
-                    "nickname": "unsad",
-                    "seat": 3,
-                    "point": 22200
-                }
-            ]
-        },
-        {
-            "uuid": "240629-1e1de957-b54b-46be-a860-fd932655bf95",
-            "time": 1719676090,
-            "score": [
-                {
-                    "nickname": "铃木光　",
-                    "seat": 0,
-                    "point": 19000
-                },
-                {
-                    "nickname": "宽恕者茴香",
-                    "seat": 1,
-                    "point": 26400
-                },
-                {
-                    "nickname": "照阿",
-                    "seat": 2,
-                    "point": 36800
-                },
-                {
-                    "nickname": "于是郎和",
-                    "seat": 3,
-                    "point": 17800
-                }
-            ]
-        },
-        {
-            "uuid": "240629-cfc8b766-d12e-4d3a-a267-3e9b7e51f47a",
-            "time": 1719675956,
-            "score": [
-                {
-                    "nickname": "这游戏谁在赢啊",
-                    "seat": 0,
-                    "point": 11900
-                },
-                {
-                    "nickname": "远坂凛",
-                    "seat": 1,
-                    "point": 25400
-                },
-                {
-                    "nickname": "米米",
-                    "seat": 2,
-                    "point": 39600
-                },
-                {
-                    "nickname": "dota小鱼",
-                    "seat": 3,
-                    "point": 23100
-                }
-            ]
-        },
-        {
-            "uuid": "240629-5a106d50-362a-4f93-a691-565aa1bb9be5",
-            "time": 1719675896,
-            "score": [
-                {
-                    "nickname": "枣苗",
-                    "seat": 0,
-                    "point": 12800
-                },
-                {
-                    "nickname": "喀斯特那抹蓝",
-                    "seat": 1,
-                    "point": 23400
-                },
-                {
-                    "nickname": "无法回避的厄运",
-                    "seat": 2,
-                    "point": 36000
-                },
-                {
-                    "nickname": "藤林杏",
-                    "seat": 3,
-                    "point": 27800
-                }
-            ]
-        },
-        {
-            "uuid": "240629-afe2946b-37b7-4f02-8b6f-dedf76b85d13",
-            "time": 1719675858,
-            "score": [
-                {
-                    "nickname": "OldFour",
-                    "seat": 0,
-                    "point": 30000
-                },
-                {
-                    "nickname": "アザミ嬢",
-                    "seat": 1,
-                    "point": 32000
-                },
-                {
-                    "nickname": "正义一番胡",
-                    "seat": 2,
-                    "point": 18800
-                },
-                {
-                    "nickname": "边听歌边玩",
-                    "seat": 3,
-                    "point": 19200
-                }
-            ]
-        },
-        {
-            "uuid": "240629-e635be9b-78ba-450e-837c-4c346e26eae3",
-            "time": 1719675732,
-            "score": [
-                {
-                    "nickname": "无限飓风号",
-                    "seat": 0,
-                    "point": 5500
-                },
-                {
-                    "nickname": "我还不跟你急",
-                    "seat": 1,
-                    "point": 18500
-                },
-                {
-                    "nickname": "xlww",
-                    "seat": 2,
-                    "point": 60300
-                },
-                {
-                    "nickname": "小睡熊",
-                    "seat": 3,
-                    "point": 15700
-                }
-            ]
-        },
-        {
-            "uuid": "240629-8d11f0ec-b345-4609-9e7d-ce94c20bb6a6",
-            "time": 1719675699,
-            "score": [
-                {
-                    "nickname": "光的行方",
-                    "seat": 0,
-                    "point": 21400
-                },
-                {
-                    "nickname": "Together丶",
-                    "seat": 1,
-                    "point": 19900
-                },
-                {
-                    "nickname": "狄不云",
-                    "seat": 2,
-                    "point": 18300
-                },
-                {
-                    "nickname": "痴呆镜小To",
-                    "seat": 3,
-                    "point": 40400
-                }
-            ]
-        },
-        {
-            "uuid": "240629-5cef9c5e-395e-43c7-aa82-78e5d76b2a29",
-            "time": 1719675697,
-            "score": [
-                {
-                    "nickname": "白衣飘雪灬",
-                    "seat": 0,
-                    "point": 21400
-                },
-                {
-                    "nickname": "一个大凰墟",
-                    "seat": 1,
-                    "point": 30000
-                },
-                {
-                    "nickname": "混沌恶",
-                    "seat": 2,
-                    "point": 32000
-                },
-                {
-                    "nickname": "第一张绝不打字",
-                    "seat": 3,
-                    "point": 16600
-                }
-            ]
-        },
-        {
-            "uuid": "240629-c19bfff8-97b7-4874-8afd-afb4482a010c",
-            "time": 1719675146,
-            "score": [
-                {
-                    "nickname": "果断直接白给",
-                    "seat": 0,
-                    "point": 62200
-                },
-                {
-                    "nickname": "~iris~",
-                    "seat": 1,
-                    "point": -400
-                },
-                {
-                    "nickname": "lhylllll",
-                    "seat": 2,
-                    "point": 23900
-                },
-                {
-                    "nickname": "夜雨璇",
-                    "seat": 3,
-                    "point": 14300
-                }
-            ]
+            "id": 37,
+            "contest_id": 26860391,
+            "name": "“飞天杯”日麻竞技赛",
+            "nickname": "NUAA飞天杯S1",
+            "description": "",
+            "start_time": 1737709200,
+            "finish_time": 1739689200,
+            "rule": 0,
+            "game_mode": 2,
+            "game_property": 1,
+            "last_update": 1739854865224,
+            "contest_short_id": 280319,
+            "watching": 1,
+            "divide_equally": 0
         }
     ],
+    'GET /api/getGameRecordListByPage': [],
     'GET /api/getGameRecordDetail': {
         "uuid": "240629-afe2946b-37b7-4f02-8b6f-dedf76b85d13",
         "time": 1719675858,
@@ -581,5 +155,389 @@ export default {
                 "fangchong": 0,
             }
         ]
-    }
+    },
+    'GET /api/getContestTeamList': {
+        "1": [
+          {
+            "team_id": 2,
+            "team_name": "Ave Majsoul",
+            "ttl_accuracy": 275400,
+            "ttl_match": 24,
+            "ttl_one": 8,
+            "ttl_two": 8,
+            "ttl_three": 4,
+            "ttl_four": 4,
+            "rank": 1,
+            "ttl_accuracy_diff": 0,
+            "ttl_accuracy_elim": 287900
+          },
+          {
+            "team_id": 4,
+            "team_name": "大航海时代",
+            "ttl_accuracy": 227200,
+            "ttl_match": 24,
+            "ttl_one": 8,
+            "ttl_two": 6,
+            "ttl_three": 6,
+            "ttl_four": 4,
+            "rank": 2,
+            "ttl_accuracy_diff": 48200,
+            "ttl_accuracy_elim": 239700
+          },
+          {
+            "team_id": 5,
+            "team_name": "你的盐我的醋",
+            "ttl_accuracy": 162100,
+            "ttl_match": 24,
+            "ttl_one": 9,
+            "ttl_two": 3,
+            "ttl_three": 6,
+            "ttl_four": 6,
+            "rank": 3,
+            "ttl_accuracy_diff": 65100,
+            "ttl_accuracy_elim": 174600
+          },
+          {
+            "team_id": 8,
+            "team_name": "205老人院",
+            "ttl_accuracy": 151800,
+            "ttl_match": 24,
+            "ttl_one": 6,
+            "ttl_two": 10,
+            "ttl_three": 3,
+            "ttl_four": 5,
+            "rank": 4,
+            "ttl_accuracy_diff": 10300,
+            "ttl_accuracy_elim": 164300
+          },
+          {
+            "team_id": 15,
+            "team_name": "灵感来了",
+            "ttl_accuracy": 34300,
+            "ttl_match": 24,
+            "ttl_one": 8,
+            "ttl_two": 3,
+            "ttl_three": 7,
+            "ttl_four": 6,
+            "rank": 5,
+            "ttl_accuracy_diff": 117500,
+            "ttl_accuracy_elim": 46800
+          },
+          {
+            "team_id": 6,
+            "team_name": "烫团",
+            "ttl_accuracy": 23300,
+            "ttl_match": 24,
+            "ttl_one": 6,
+            "ttl_two": 7,
+            "ttl_three": 5,
+            "ttl_four": 6,
+            "rank": 6,
+            "ttl_accuracy_diff": 11000,
+            "ttl_accuracy_elim": 35800
+          },
+          {
+            "team_id": 11,
+            "team_name": "No seed",
+            "ttl_accuracy": 13100,
+            "ttl_match": 24,
+            "ttl_one": 3,
+            "ttl_two": 12,
+            "ttl_three": 5,
+            "ttl_four": 4,
+            "rank": 7,
+            "ttl_accuracy_diff": 10200,
+            "ttl_accuracy_elim": 25600
+          },
+          {
+            "team_id": 9,
+            "team_name": "云岭",
+            "ttl_accuracy": -4800,
+            "ttl_match": 24,
+            "ttl_one": 7,
+            "ttl_two": 3,
+            "ttl_three": 7,
+            "ttl_four": 7,
+            "rank": 8,
+            "ttl_accuracy_diff": 17900,
+            "ttl_accuracy_elim": 7700
+          },
+          {
+            "team_id": 7,
+            "team_name": "奶奶一拖四",
+            "ttl_accuracy": -12500,
+            "ttl_match": 24,
+            "ttl_one": 5,
+            "ttl_two": 6,
+            "ttl_three": 8,
+            "ttl_four": 5,
+            "rank": 9,
+            "ttl_accuracy_diff": 7700,
+            "ttl_accuracy_elim": -7700
+          },
+          {
+            "team_id": 13,
+            "team_name": "跟我打一辈子麻将",
+            "ttl_accuracy": -48900,
+            "ttl_match": 24,
+            "ttl_one": 6,
+            "ttl_two": 5,
+            "ttl_three": 6,
+            "ttl_four": 7,
+            "rank": 10,
+            "ttl_accuracy_diff": 36400,
+            "ttl_accuracy_elim": -44100
+          },
+          {
+            "team_id": 16,
+            "team_name": "有铳无铳",
+            "ttl_accuracy": -58900,
+            "ttl_match": 24,
+            "ttl_one": 7,
+            "ttl_two": 4,
+            "ttl_three": 5,
+            "ttl_four": 8,
+            "rank": 11,
+            "ttl_accuracy_diff": 10000,
+            "ttl_accuracy_elim": -54100
+          },
+          {
+            "team_id": 14,
+            "team_name": "菲谢尔皇女夜谭",
+            "ttl_accuracy": -61500,
+            "ttl_match": 24,
+            "ttl_one": 5,
+            "ttl_two": 6,
+            "ttl_three": 7,
+            "ttl_four": 6,
+            "rank": 12,
+            "ttl_accuracy_diff": 2600,
+            "ttl_accuracy_elim": -56700
+          },
+          {
+            "team_id": 12,
+            "team_name": "千里山",
+            "ttl_accuracy": -125000,
+            "ttl_match": 24,
+            "ttl_one": 6,
+            "ttl_two": 5,
+            "ttl_three": 3,
+            "ttl_four": 10,
+            "rank": 13,
+            "ttl_accuracy_diff": 63500,
+            "ttl_accuracy_elim": -120200
+          },
+          {
+            "team_id": 10,
+            "team_name": "和他拼了",
+            "ttl_accuracy": -130600,
+            "ttl_match": 24,
+            "ttl_one": 4,
+            "ttl_two": 8,
+            "ttl_three": 6,
+            "ttl_four": 6,
+            "rank": 14,
+            "ttl_accuracy_diff": 5600,
+            "ttl_accuracy_elim": -125800
+          },
+          {
+            "team_id": 3,
+            "team_name": "壹心會",
+            "ttl_accuracy": -159400,
+            "ttl_match": 24,
+            "ttl_one": 3,
+            "ttl_two": 6,
+            "ttl_three": 13,
+            "ttl_four": 2,
+            "rank": 15,
+            "ttl_accuracy_diff": 28800,
+            "ttl_accuracy_elim": -154600
+          },
+          {
+            "team_id": 1,
+            "team_name": "Ave Mujica",
+            "ttl_accuracy": -285600,
+            "ttl_match": 24,
+            "ttl_one": 5,
+            "ttl_two": 4,
+            "ttl_three": 5,
+            "ttl_four": 10,
+            "rank": 16,
+            "ttl_accuracy_diff": 126200,
+            "ttl_accuracy_elim": -280800
+          }
+        ],
+        "2": [
+          {
+            "team_id": 5,
+            "team_name": "你的盐我的醋",
+            "ttl_accuracy": 278300,
+            "ttl_match": 12,
+            "ttl_one": 4,
+            "ttl_two": 5,
+            "ttl_three": 2,
+            "ttl_four": 1,
+            "inherit": 81100,
+            "rank": 1,
+            "ttl_accuracy_diff": 0,
+            "ttl_accuracy_elim": 272500
+          },
+          {
+            "team_id": 2,
+            "team_name": "Ave Majsoul",
+            "ttl_accuracy": 214200,
+            "ttl_match": 12,
+            "ttl_one": 4,
+            "ttl_two": 4,
+            "ttl_three": 1,
+            "ttl_four": 3,
+            "inherit": 137700,
+            "rank": 2,
+            "ttl_accuracy_diff": 64100,
+            "ttl_accuracy_elim": 208400
+          },
+          {
+            "team_id": 4,
+            "team_name": "大航海时代",
+            "ttl_accuracy": 77900,
+            "ttl_match": 12,
+            "ttl_one": 3,
+            "ttl_two": 4,
+            "ttl_three": 2,
+            "ttl_four": 3,
+            "inherit": 113600,
+            "rank": 3,
+            "ttl_accuracy_diff": 136300,
+            "ttl_accuracy_elim": 72100
+          },
+          {
+            "team_id": 11,
+            "team_name": "No seed",
+            "ttl_accuracy": 55700,
+            "ttl_match": 12,
+            "ttl_one": 4,
+            "ttl_two": 3,
+            "ttl_three": 2,
+            "ttl_four": 3,
+            "inherit": 6600,
+            "rank": 4,
+            "ttl_accuracy_diff": 22200,
+            "ttl_accuracy_elim": 49900
+          },
+          {
+            "team_id": 9,
+            "team_name": "云岭",
+            "ttl_accuracy": 5800,
+            "ttl_match": 12,
+            "ttl_one": 3,
+            "ttl_two": 3,
+            "ttl_three": 1,
+            "ttl_four": 5,
+            "inherit": -2400,
+            "rank": 5,
+            "ttl_accuracy_diff": 49900,
+            "ttl_accuracy_elim": -49900
+          },
+          {
+            "team_id": 6,
+            "team_name": "烫团",
+            "ttl_accuracy": -42800,
+            "ttl_match": 12,
+            "ttl_one": 2,
+            "ttl_two": 4,
+            "ttl_three": 4,
+            "ttl_four": 2,
+            "inherit": 11700,
+            "rank": 6,
+            "ttl_accuracy_diff": 48600,
+            "ttl_accuracy_elim": -98500
+          },
+          {
+            "team_id": 15,
+            "team_name": "灵感来了",
+            "ttl_accuracy": -50400,
+            "ttl_match": 12,
+            "ttl_one": 2,
+            "ttl_two": 1,
+            "ttl_three": 5,
+            "ttl_four": 4,
+            "inherit": 17200,
+            "rank": 7,
+            "ttl_accuracy_diff": 7600,
+            "ttl_accuracy_elim": -106100
+          },
+          {
+            "team_id": 8,
+            "team_name": "205老人院",
+            "ttl_accuracy": -97300,
+            "ttl_match": 12,
+            "ttl_one": 2,
+            "ttl_two": 0,
+            "ttl_three": 7,
+            "ttl_four": 3,
+            "inherit": 75900,
+            "rank": 8,
+            "ttl_accuracy_diff": 46900,
+            "ttl_accuracy_elim": -153000
+          }
+        ],
+        "3": [
+          {
+            "team_id": 2,
+            "team_name": "Ave Majsoul",
+            "ttl_accuracy": 218100,
+            "ttl_match": 6,
+            "ttl_one": 2,
+            "ttl_two": 3,
+            "ttl_three": 1,
+            "ttl_four": 0,
+            "inherit": 107100,
+            "rank": 1,
+            "ttl_accuracy_diff": 0,
+            "ttl_accuracy_elim": 205900
+          },
+          {
+            "team_id": 5,
+            "team_name": "你的盐我的醋",
+            "ttl_accuracy": 156700,
+            "ttl_match": 6,
+            "ttl_one": 1,
+            "ttl_two": 2,
+            "ttl_three": 3,
+            "ttl_four": 0,
+            "inherit": 139200,
+            "rank": 2,
+            "ttl_accuracy_diff": 61400,
+            "ttl_accuracy_elim": 144500
+          },
+          {
+            "team_id": 11,
+            "team_name": "No seed",
+            "ttl_accuracy": 12200,
+            "ttl_match": 6,
+            "ttl_one": 2,
+            "ttl_two": 0,
+            "ttl_three": 1,
+            "ttl_four": 3,
+            "inherit": 27900,
+            "rank": 3,
+            "ttl_accuracy_diff": 144500,
+            "ttl_accuracy_elim": -144500
+          },
+          {
+            "team_id": 4,
+            "team_name": "大航海时代",
+            "ttl_accuracy": -73800,
+            "ttl_match": 6,
+            "ttl_one": 1,
+            "ttl_two": 1,
+            "ttl_three": 1,
+            "ttl_four": 3,
+            "inherit": 39000,
+            "rank": 4,
+            "ttl_accuracy_diff": 86000,
+            "ttl_accuracy_elim": -230500
+          }
+        ]
+      }
 }

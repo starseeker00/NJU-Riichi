@@ -381,9 +381,9 @@ const PlayerStatistics = () => {
 
     const { game_property } = useOutletContext<{ game_property: number }>();
 
-    useEffect(() => {
-        console.log(game_property);
-    }, [game_property]);
+    // useEffect(() => {
+    //     console.log(game_property);
+    // }, [game_property]);
 
     const items = [
         {

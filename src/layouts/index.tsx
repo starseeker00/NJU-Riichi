@@ -49,9 +49,6 @@ const AppLayout: React.FC = () => {
         </div>
         <FloatButton.BackTop visibilityHeight={200} />
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
-        Ant Design ©2024 Created by 青岚
-      </Footer>
     </Layout>
   );
 };

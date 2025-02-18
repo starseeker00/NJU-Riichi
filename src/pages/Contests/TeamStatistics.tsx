@@ -2,7 +2,7 @@
 import { perset_color } from "@/const";
 import { getContestTeams } from "@/services/api";
 import { DownloadOutlined } from "@ant-design/icons";
-import { Button, Collapse, Space, Table, Tooltip } from "antd";
+import { Button, Collapse, Space, Spin, Table, Tooltip } from "antd";
 import html2canvas from "html2canvas";
 import { AlignType } from "rc-table/lib/interface";
 import { useEffect, useRef, useState } from "react";
@@ -157,14 +157,20 @@ const TeamStatistics = () => {
         setLoading(true);
         getContestTeams(Number(params.id)).then((res) => {
             setTeams(res.data);
+            let flag = true
             for (let i = 1; i <= 3; i++) {
                 if (!res.data[i].length) {
                     setCurrent(Math.max(1, i - 1));
                     setLength(i - 1);
+                    flag = false;
                     break;
                 }
             }
-            setLoading(false);
+            if (flag) {
+                setCurrent(3);
+                setLength(3);
+            }
+            setLoading(false)
         });
     }, [params.id]);
 
@@ -187,10 +193,11 @@ const TeamStatistics = () => {
     ];
 
     return (
-        <Collapse accordion items={items.slice(0, length)}
-            activeKey={current.toString()}
-            onChange={(key) => setCurrent(Number(key))}
-        />
+        loading ? <Spin size="large" /> :
+            <Collapse accordion items={items.slice(0, length)}
+                activeKey={current.toString()}
+                onChange={(key) => setCurrent(Number(key))}
+            />
     )
 }
 
