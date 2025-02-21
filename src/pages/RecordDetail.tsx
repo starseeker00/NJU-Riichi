@@ -76,7 +76,7 @@ const RecordDetail = () => {
 
     useEffect(() => {
         if (!chartRef.current) return;
-        
+
         const chart = echarts.init(chartRef.current);
         setChartInstance(chart);
 
@@ -144,9 +144,15 @@ const RecordDetail = () => {
         <div>
             <a onClick={() => navigate(-1)}>&lt; 返回</a>
             <Spin spinning={!data}>
-                <Row>
+                <Row style={{ marginTop: 16 }}>
                     <Col span={16}>
-                        <div ref={chartRef} style={{ height: 500 }}></div>
+                        <div ref={chartRef}
+                            style={{
+                                height: 500,
+                                padding: 16,
+                                borderRadius: 8,
+                                background: 'rgba(255,255,255,0.6)'
+                            }} />
                     </Col>
                     <Col span={8} style={{ paddingLeft: 16 }}>
                         <Space direction="vertical">

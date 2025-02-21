@@ -1,5 +1,6 @@
 
 import { useAuth0 } from "@auth0/auth0-react";
+import { Button, Space } from "antd";
 
 const LoginButton = () => {
     const { isLoading, isAuthenticated, error, user, loginWithRedirect, logout } =
@@ -7,15 +8,25 @@ const LoginButton = () => {
 
     if (isAuthenticated) {
         return (
-            <div style={{ color: 'white' }}>
-                Hello {user?.name}{' '}
-                <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
+            <Space
+                style={{ color: 'white' }}
+                direction="horizontal"
+                size="middle"
+            >
+                <div>Hello {user?.name}</div>
+                <Button
+                    style={{ color: 'white', borderColor: 'white' }}
+                    onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
                     Log out
-                </button>
-            </div>
+                </Button>
+            </Space>
         );
     } else {
-        return <button onClick={() => loginWithRedirect()}>Log in</button>;
+        return <Button
+            style={{ color: 'white', borderColor: 'white' }}
+            onClick={() => loginWithRedirect()}>
+            Log in
+        </Button>;
     }
 };
 

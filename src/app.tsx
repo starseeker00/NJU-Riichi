@@ -1,4 +1,5 @@
 import { Auth0Provider } from '@auth0/auth0-react';
+import { ConfigProvider } from 'antd';
 import React from 'react';
 import { defineApp, matchRoutes } from 'umi';
 export default defineApp({
@@ -9,14 +10,26 @@ export default defineApp({
         }
     },
     rootContainer: (container) => {
-        return React.createElement(Auth0Provider, {
+        const themeProvider = React.createElement(ConfigProvider, {
+            theme: {
+                token: {
+                    colorBgContainer: 'transparent',
+                    colorBorder: 'gray',
+                    colorBorderSecondary: 'gray',
+                },
+            }
+        }, container);
+
+        const authProvider = React.createElement(Auth0Provider, {
             domain: 'dev-qh5vj1pjwwrk1yxt.us.auth0.com',
             clientId: 'VafOLjyKcHVHZRWVe0xTxxLOj4SSrPfH',
-            authorizationParams: { 
+            authorizationParams: {
                 redirect_uri: window.location.origin,
                 // audience: 'https://nju-riichi.pages.dev/api/check',
-             },
-        }, container);
+            },
+        }, themeProvider);
+
+        return authProvider;
     }
 });
 

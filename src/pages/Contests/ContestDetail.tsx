@@ -140,8 +140,8 @@ const ContestDetail = () => {
 
   return (
     <Spin spinning={contests.length === 0} size="large">
-      <Layout style={{ background: colorBgContainer, borderRadius: borderRadiusLG }}>
-        <Sider style={{ background: colorBgContainer }}
+      <Layout style={{ background: 'rgba(255,255,255,0.4)', borderRadius: borderRadiusLG }}>
+        {/* <Sider style={{ background: 'rgba(255,255,255,0.4)', borderRadius: borderRadiusLG }}
           theme="light"
           collapsible
           collapsed={collapsed}
@@ -165,7 +165,7 @@ const ContestDetail = () => {
             items={filterContests.filter((group) => group.children?.length)}
             onClick={({ key }) => { navigate(`/contests/${key}/players`) }}
           />
-        </Sider>
+        </Sider> */}
         {contests.length > 0 &&
           <Content style={{ padding: '0 24px', minHeight: 280 }}>
             <div style={{ position: 'relative', minHeight: 50 }}>

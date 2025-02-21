@@ -248,7 +248,6 @@ const GameSchedule: React.FC = () => {
                 components={{
                     body: { cell: EditableCell },
                 }}
-                bordered
                 loading={loading}
                 dataSource={data}
                 columns={mergedColumns}
