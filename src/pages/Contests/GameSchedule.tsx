@@ -5,6 +5,7 @@ import { addSchedule, deleteSchedule, getSchedule, updateSchedule } from '@/serv
 import { useParams } from 'umi';
 import { useAuth0 } from '@auth0/auth0-react';
 import { checkScope, wrapScope } from '@/util/auth';
+import { useAuth } from '@/hooks/auth';
 
 interface DataType {
     key: string;
@@ -66,20 +67,22 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 const GameSchedule: React.FC = () => {
-    const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-    const [couldUpdate, setCouldUpdate] = useState(false);
-    const [token, setToken] = useState<string>('');
+    // const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+    // const [couldUpdate, setCouldUpdate] = useState(false);
+    // const [token, setToken] = useState<string>('');
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            const scope = 'update:contest';
-            getAccessTokenSilently(wrapScope(scope)).then((token) => {
-                const couldUpdate = checkScope(token, scope);
-                setCouldUpdate(couldUpdate);
-                setToken(token);
-            });
-        }
-    }, [isAuthenticated]);
+    // useEffect(() => {
+    //     if (isAuthenticated) {
+    //         const scope = 'update:contest';
+    //         getAccessTokenSilently(wrapScope(scope)).then((token) => {
+    //             const couldUpdate = checkScope(token, scope);
+    //             setCouldUpdate(couldUpdate);
+    //             setToken(token);
+    //         });
+    //     }
+    // }, [isAuthenticated]);
+
+    const { user, isAuthenticated, couldUpdate, token } = useAuth();
 
     const [form] = Form.useForm();
     const [data, setData] = useState<DataType[]>([]);

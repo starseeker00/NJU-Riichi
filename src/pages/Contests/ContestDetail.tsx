@@ -1,4 +1,5 @@
 import { StatisticTabType } from "@/const";
+import { useAuth } from "@/hooks/auth";
 import { getContests, updateContest } from "@/services/api";
 import { checkScope, wrapScope } from "@/util/auth";
 import { CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ReloadOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
@@ -32,20 +33,22 @@ const ContestDetail = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const [couldUpdate, setCouldUpdate] = useState(false);
-  const [token, setToken] = useState<string>('');
+  // const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  // const [couldUpdate, setCouldUpdate] = useState(false);
+  // const [token, setToken] = useState<string>('');
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      const scope = 'update:contest';
-      getAccessTokenSilently(wrapScope(scope)).then((token) => {
-        const couldUpdate = checkScope(token, scope);
-        setCouldUpdate(couldUpdate);
-        setToken(token);
-      });
-    }
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     const scope = 'update:contest';
+  //     getAccessTokenSilently(wrapScope(scope)).then((token) => {
+  //       const couldUpdate = checkScope(token, scope);
+  //       setCouldUpdate(couldUpdate);
+  //       setToken(token);
+  //     });
+  //   }
+  // }, [isAuthenticated]);
+
+  const {user, isAuthenticated, couldUpdate, token} = useAuth();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -177,7 +180,9 @@ const ContestDetail = () => {
                 title="赛事信息"
                 open={showMore}
                 onCancel={() => setShowMore(false)}
-                footer={null}
+                footer={
+                  couldUpdate && <Button type="primary">编辑</Button>
+                }
               >
                 <Space direction="vertical">
                   <div>
@@ -203,7 +208,7 @@ const ContestDetail = () => {
               </Modal>
               <p>{selectedContest?.description}</p>
               <div style={{ position: 'absolute', top: 0, right: 0, direction: 'rtl' }}>
-                <div>
+                {couldUpdate && <div>
                   <Button
                     type="dashed"
                     icon={<ReloadOutlined />}
@@ -214,15 +219,17 @@ const ContestDetail = () => {
                       updateContest(contestId, token)
                         .then(() => {
                           Modal.success({ content: '更新成功' });
-                          setUpdating(false);
                         })
                         .catch(() => {
                           Modal.error({ content: '更新失败' });
+                        })
+                        .finally(() => {
                           setUpdating(false);
                         });
                     }}
                   >更新数据</Button>
                 </div>
+                }
                 <div style={{ color: 'gray' }}>
                   最后更新时间：{new Date(selectedContest?.last_update).toLocaleString()}
                 </div>

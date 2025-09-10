@@ -62,9 +62,9 @@ const GameRecords = () => {
     const [showStar, setShowStar] = useState<boolean>(false);
 
     useEffect(() => {
-        const star = localStorage.getItem('star');
-        if (star) {
-            setStar(JSON.parse(star));
+        const s = localStorage.getItem('star');
+        if (s) {
+            setStar(JSON.parse(s));
         }
     }, []);
 

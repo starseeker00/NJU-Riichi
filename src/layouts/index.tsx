@@ -5,6 +5,7 @@ import routes from '../../config/routes';
 import './index.less';
 import LoginButton from '@/components/login';
 import SupportButton from '@/components/support';
+import GlobalNotice from '@/components/GlobalNotice';
 
 const { Header, Content, Footer } = Layout;
 
@@ -19,6 +20,7 @@ const AppLayout: React.FC = () => {
   return (
     <Layout style={{ minHeight: '100vh', position: 'relative' }}>
       <div className='bg' />
+      <GlobalNotice />
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         {/* <div className="demo-logo" /> */}
         <div style={{

@@ -1,8 +1,10 @@
-import { getContests } from "@/services/api";
+import { useAuth } from "@/hooks/auth";
+import { addOrUpdateContest, fetchContestInfo, getContests } from "@/services/api";
 import { checkScope, wrapScope } from "@/util/auth";
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button, Card, Spin, theme } from "antd";
+import { Button, Card, Form, Input, message, Modal, Select, Space, Spin, theme } from "antd";
+import { use } from "echarts/types/src/extension.js";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "umi";
 
@@ -28,20 +30,7 @@ const ContestPage = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  // const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  // const [couldUpdate, setCouldUpdate] = useState(false);
-  // const [token, setToken] = useState<string>('');
-
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     const scope = 'update:contest';
-  //     getAccessTokenSilently(wrapScope(scope)).then((token) => {
-  //       const couldUpdate = checkScope(token, scope);
-  //       setCouldUpdate(couldUpdate);
-  //       setToken(token);
-  //     });
-  //   }
-  // }, [isAuthenticated]);
+  const { user, isAuthenticated, couldUpdate, token } = useAuth();
 
   const navigate = useNavigate();
 
@@ -88,9 +77,15 @@ const ContestPage = () => {
       }));
   }, [contests]);
 
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div style={{ marginTop: 32, padding: '0 48px' }}>
-      <h1>赛事列表</h1>
+      <div>
+        <h1>赛事列表</h1>
+        {couldUpdate && <Button type="primary" onClick={() => setShowModal(true)}>添加赛事</Button>}
+      </div>
+      <ContestInfoModal open={showModal} onClose={() => setShowModal(false)} />
       {
         loading ? <Spin size="large" /> :
           filterContests.map((group) => (
@@ -126,5 +121,146 @@ const ContestPage = () => {
     </div>
   );
 };
+
+const ContestInfoModal = (props: { open: boolean, onClose: () => void }) => {
+
+  const [form] = Form.useForm();
+  const hasValue = useMemo(() => !!form.getFieldValue('contest_id'), [form.getFieldValue('contest_id')]);
+
+  const [loading, setLoading] = useState(false);
+  const [tip, setTip] = useState('');
+
+  const submit = (values: any) => {
+    setLoading(true);
+    console.log('Received values:', values);
+    if (!hasValue) {
+      setTip('正在获取赛事信息，请稍候...');
+      // console.log('Received values:', values);
+      fetchContestInfo({ contest_id: values.contest_short_id })
+        .then((res) => {
+          form.resetFields();
+          form.setFieldsValue(res.data);
+          setTip('');
+        })
+        .catch((error) => {
+          setTip('获取赛事信息失败，请检查赛事号是否正确');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setTip('正在添加赛事，请稍候...');
+      addOrUpdateContest(values)
+        .then((res) => {
+          props.onClose();
+          Modal.success({ title: '添加赛事成功', content: '请在赛事列表中查看新添加的赛事' });
+          form.resetFields();
+        })
+        .catch((error) => {
+          setTip('添加赛事失败，请稍后重试');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }
+
+  return (
+    <Modal
+      open={props.open}
+      onCancel={props.onClose}
+      title="添加赛事"
+      footer={null}
+      maskClosable={false}
+      centered
+      width={800}
+    >
+      <Form
+        name="contestForm"
+        form={form}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+        onFinish={submit}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="6位赛事号"
+          name="contest_short_id"
+          rules={[{ len: 6, message: '请输入6位赛事号!' }]}
+        >
+          <Input maxLength={6} disabled={loading || hasValue} />
+        </Form.Item>
+
+        {
+          hasValue && (
+            <>
+              <Form.Item label="赛事ID" name="contest_id">
+                <Input disabled />
+              </Form.Item>
+
+              <Form.Item label="赛事名称" name="name">
+                <Input disabled />
+              </Form.Item>
+
+              <Form.Item label="赛事简称（可选）" name="nickname">
+                <Input />
+              </Form.Item>
+
+              <Form.Item label="开始时间" name="start_time">
+                <Input disabled />
+              </Form.Item>
+
+              <Form.Item label="结束时间" name="finish_time">
+                <Input disabled />
+              </Form.Item>
+
+              <Form.Item label="比赛模式" name="game_mode">
+                <Input disabled />
+              </Form.Item>
+
+              <Form.Item label="计分规则" name="rule">
+                <Input disabled />
+              </Form.Item>
+
+              <Form.Item label="比赛描述" name="description">
+                <Input disabled />
+              </Form.Item>
+
+              <Form.Item label="比赛性质" name="game_property" initialValue={0}>
+                <Select
+                  options={[
+                    { label: '个人赛', value: 0 },
+                    { label: '团体赛', value: 1 },
+                  ]}
+                />
+              </Form.Item>
+
+              <Form.Item label="同分是否平分顺位马" name="divide_equally" initialValue={0}>
+                <Select
+                  options={[
+                    { label: '是', value: 1 },
+                    { label: '否', value: 0 },
+                  ]}
+                />
+              </Form.Item>
+            </>
+          )
+        }
+
+        <Space style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            {hasValue ? '确认添加赛事' : '获取赛事信息'}
+          </Button>
+          <Button disabled={loading} onClick={() => form.resetFields()}>
+            重置
+          </Button>
+          {tip && <span style={{ color: 'red' }}>{tip}</span>}
+        </Space>
+      </Form>
+
+    </Modal >
+  )
+}
 
 export default ContestPage;
