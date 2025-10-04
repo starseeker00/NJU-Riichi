@@ -6,6 +6,7 @@ import { useParams } from 'umi';
 import { useAuth0 } from '@auth0/auth0-react';
 import { checkScope, wrapScope } from '@/util/auth';
 import { useAuth } from '@/hooks/auth';
+import { infoTooltip } from '@/components/tips';
 
 interface DataType {
     key: string;
@@ -124,9 +125,9 @@ const GameSchedule: React.FC = () => {
                 await addSchedule({
                     ...row,
                     contest_id: Number(params.id),
-                }, token);
+                });
             } else {
-                await updateSchedule({ ...row, id: key }, token);
+                await updateSchedule({ ...row, id: key });
             }
             setEditingKey('');
 
@@ -142,7 +143,7 @@ const GameSchedule: React.FC = () => {
 
     const remove = async (key: React.Key) => {
         setLoading(true);
-        await deleteSchedule(Number(key), token);
+        await deleteSchedule(Number(key));
         await getSchedule(Number(params.id)).then((res) => {
             setData(res.data.map((item: any) => ({ ...item, key: item.id.toString() })));
             setLoading(false);
@@ -151,36 +152,36 @@ const GameSchedule: React.FC = () => {
 
     const columns = [
         {
-            title: '时间节点',
+            title: '赛程结束节点（不含）',
             dataIndex: 'time_point',
             width: '20%',
             editable: true,
         },
         {
-            title: '描述',
+            title: '赛季/赛程名称',
             dataIndex: 'description',
             editable: true,
         },
-        {
-            title: '性质',
-            dataIndex: 'property',
-            width: '25%',
-            editable: true,
-            render: (text: number) => {
-                switch (text) {
-                    case 0:
-                        return '自由匹配';
-                    case 1:
-                        return '初赛/常规赛';
-                    case 2:
-                        return '复赛/季后赛';
-                    case 3:
-                        return '决赛';
-                    default:
-                        return '未知';
-                }
-            },
-        },
+        // {
+        //     title: '性质',
+        //     dataIndex: 'property',
+        //     width: '25%',
+        //     editable: true,
+        //     render: (text: number) => {
+        //         switch (text) {
+        //             case 0:
+        //                 return '自由匹配';
+        //             case 1:
+        //                 return '初赛/常规赛';
+        //             case 2:
+        //                 return '复赛/季后赛';
+        //             case 3:
+        //                 return '决赛';
+        //             default:
+        //                 return '未知';
+        //         }
+        //     },
+        // },
         {
             title: 'operation',
             dataIndex: 'operation',

@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import axios from 'axios';
 
 // axios.defaults.transformResponse = [function (data) {
@@ -9,14 +10,32 @@ import axios from 'axios';
 // }];
 
 // 统一设置请求头
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token') || ''}`;
+// axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token') || ''}`;
+
+axios.interceptors.request.use(config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${token}`
+        };
+    }
+    return config;
+});
+
+axios.interceptors.response.use(response => {
+    return response;
+}, error => {
+    message.error(error.response?.data?.message || error.message || '请求出错');
+    return Promise.reject(error);
+});
 
 export function getContests() {
     return axios.get('/api/contest/getContestList');
 }
 
-export function getContestPlayers(contestId: number, schedule: number) {
-    return axios.get(`/api/contest/getContestPlayerList?contestId=${contestId}&schedule=${schedule}`);
+export function getContestPlayers(contestId: number, scheduleEnd: number, scheduleStart?: number) {
+    return axios.get(`/api/contest/getContestPlayerList?contestId=${contestId}&scheduleEnd=${scheduleEnd}${scheduleStart ? `&scheduleStart=${scheduleStart}` : ''}`);
 }
 
 export function getContestRecords(contestId: number) {

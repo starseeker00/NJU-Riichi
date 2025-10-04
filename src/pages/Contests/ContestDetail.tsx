@@ -1,4 +1,5 @@
 import { StatisticTabType } from "@/const";
+import { gameModeMap } from "@/const/majsoul";
 import { useAuth } from "@/hooks/auth";
 import { getContests, updateContest } from "@/services/api";
 import { checkScope, wrapScope } from "@/util/auth";
@@ -194,7 +195,7 @@ const ContestDetail = () => {
                   </div>
                   <div>
                     <span style={{ color: 'gray' }}>比赛模式：</span>
-                    <Tag color="blue">{selectedContest?.game_mode > 10 ? '三麻' : '四麻'}</Tag>
+                    <Tag color="blue">{gameModeMap[selectedContest?.game_mode] || '未知模式'}</Tag>
                   </div>
                   <div>
                     <span style={{ color: 'gray' }}>比赛性质：</span>
@@ -255,7 +256,7 @@ const ContestDetail = () => {
                   },
                   {
                     key: 'schedule',
-                    label: '赛程',
+                    label: '赛季/赛程',
                   }
                 ]}
                 onClick={({ key }) => { navigate(`${key}`, { replace: true }) }}

@@ -1,11 +1,14 @@
 import { getContestPlayers } from "@/services/api";
-import { Button, Checkbox, Collapse, Dropdown, Popover, Space, Table, Tooltip } from "antd";
+import { Button, Checkbox, Collapse, Dropdown, Popover, Select, Space, Table } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useOutletContext, useParams } from "umi";
 import { AlignType } from "rc-table/lib/interface";
-import { DownloadOutlined, FilterFilled, QuestionCircleOutlined } from "@ant-design/icons";
+import { DownloadOutlined, FilterFilled } from "@ant-design/icons";
 import { perset_color } from "@/const";
 import html2canvas from "html2canvas";
+import { ruleMap } from "@/const/majsoul";
+import { infoTooltip } from "@/components/tips";
+import { getSchedule } from "@/services/schedule";
 
 interface PlayerData {
     team_id: number;
@@ -31,22 +34,6 @@ interface PlayerData {
     pct_dama: number;
     pct_houfu: number;
     pct_zhenting: number;
-}
-
-const infoTooltip = ({ title }: { title: string }) => (
-    <Tooltip title={title}>
-        <QuestionCircleOutlined style={{ marginLeft: 4, color: 'grey' }} />
-    </Tooltip>
-)
-
-const ruleMap: { [key: number]: string } = {
-    0: '未设置排名方式',
-    1: '最近3战合计精算分',
-    2: '最近5战合计精算分',
-    12: '最佳连续2战合计精算分',
-    13: '最佳连续3战合计精算分',
-    14: '最佳连续4战合计精算分',
-    15: '最佳连续5战合计精算分',
 }
 
 const columns = [
@@ -255,20 +242,39 @@ const defaultColumns = columns
     .map(({ key }) => key);
 
 
-const PlayerStatisticsTable = ({ schedule = 1 }) => {
+const PlayerStatistics = () => {
     const [loading, setLoading] = useState(true);
-    const [players, setPlayers] = useState<PlayerData[]>([]);
 
     const params = useParams<{ id: string }>();
     const { game_property, rule } = useOutletContext<{ game_property: number, rule: number }>();
 
+    const [schedule, setSchedule] = useState<any[]>([]);
+
     useEffect(() => {
         setLoading(true);
-        getContestPlayers(Number(params.id), schedule).then(res => {
+        getSchedule(Number(params.id)).then(res => {
+            setSchedule(res.data);
+            setLoading(false);
+        })
+    }, [params.id]);
+
+    const [currentSchedule, setCurrentSchedule] = useState<number | undefined>(undefined);
+    useEffect(() => {
+        const now = Date.now();
+        const current = schedule.filter(item => new Date(item.time_point.split('-')).getTime() > now)[0]?.id || schedule[schedule.length - 1]?.id;
+        setCurrentSchedule(current);
+    }, [schedule]);
+
+    const [players, setPlayers] = useState<PlayerData[]>([]);
+    useEffect(() => {
+        if (!currentSchedule) return;
+        setLoading(true);
+        const index = schedule.findIndex(item => item.id === currentSchedule);
+        getContestPlayers(Number(params.id), schedule[index].id, index ? schedule[index - 1].id : undefined).then(res => {
             setPlayers(res.data);
             setLoading(false);
         })
-    }, [params.id, schedule]);
+    }, [params.id, currentSchedule]);
 
     const downloadData = useCallback(() => {
         const title = columns.map(column => column.title);
@@ -309,36 +315,48 @@ const PlayerStatisticsTable = ({ schedule = 1 }) => {
 
     return (
         <>
-            <Space style={{ position: 'absolute', top: 16, right: 0 }}>
-                <Popover
-                    content={
-                        <Checkbox.Group
-                            value={selectedColumns}
-                            options={options}
-                            onChange={(values) => setSelectedColumns(values as string[])}
-                            style={{ width: 200 }}
-                        />
-                    }
-                    trigger="click"
-                    open={open}
-                    onOpenChange={(newOpen) => setOpen(newOpen)}
-                >
-                    <Button
-                        icon={<FilterFilled />}
-                        size="small"
-                    ></Button>
-                </Popover>
-                <Dropdown
-                    menu={{
-                        items: [
-                            { key: '1', label: '导出图片 (png)', onClick: downloadImg },
-                            { key: '2', label: '导出数据 (csv)', onClick: downloadData },
-                        ]
-                    }}
-                >
-                    <Button icon={<DownloadOutlined />} size="small" />
-                </Dropdown>
-            </Space>
+            <div style={{ margin: 16, position: 'relative' }}>
+                统计周期：
+                <Select
+                    options={schedule.map(item => ({ label: item.description, value: item.id }))}
+                    value={currentSchedule}
+                    onChange={value => setCurrentSchedule(value)}
+                    style={{ minWidth: 100 }}
+                    placeholder="选择赛程"
+
+                />
+                <Space style={{ position: 'absolute', top: 16, right: 0 }}>
+                    <Popover
+                        content={
+                            <Checkbox.Group
+                                value={selectedColumns}
+                                options={options}
+                                onChange={(values) => setSelectedColumns(values as string[])}
+                                style={{ width: 200 }}
+                            />
+                        }
+                        trigger="click"
+                        open={open}
+                        onOpenChange={(newOpen) => setOpen(newOpen)}
+                    >
+                        <Button
+                            icon={<FilterFilled />}
+                            size="small"
+                        ></Button>
+                    </Popover>
+                    <Dropdown
+                        menu={{
+                            items: [
+                                { key: '1', label: '导出图片 (png)', onClick: downloadImg },
+                                { key: '2', label: '导出数据 (csv)', onClick: downloadData },
+                            ]
+                        }}
+                    >
+                        <Button icon={<DownloadOutlined />} size="small" />
+                    </Dropdown>
+                </Space>
+            </div>
+
             <div ref={tableRef}>
                 <Table
                     loading={loading}
@@ -375,37 +393,6 @@ const PlayerStatisticsTable = ({ schedule = 1 }) => {
             </div>
         </>
     )
-}
-
-const PlayerStatistics = () => {
-
-    const { game_property } = useOutletContext<{ game_property: number }>();
-
-    // useEffect(() => {
-    //     console.log(game_property);
-    // }, [game_property]);
-
-    const items = [
-        {
-            key: '1',
-            label: '常规赛',
-            children: <PlayerStatisticsTable schedule={1} />
-        },
-        {
-            key: '2',
-            label: '季后赛',
-            children: <PlayerStatisticsTable schedule={2} />
-        },
-        {
-            key: '3',
-            label: '决赛',
-            children: <PlayerStatisticsTable schedule={3} />
-        }
-    ]
-
-    return game_property
-        ? <Collapse accordion items={items} />
-        : <PlayerStatisticsTable />
 }
 
 export default PlayerStatistics;

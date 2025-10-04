@@ -1,10 +1,12 @@
+import { gameModeMap, ruleMap } from "@/const/majsoul";
 import { useAuth } from "@/hooks/auth";
 import { addOrUpdateContest, fetchContestInfo, getContests } from "@/services/api";
 import { checkScope, wrapScope } from "@/util/auth";
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button, Card, Form, Input, message, Modal, Select, Space, Spin, theme } from "antd";
+import { Button, Card, DatePicker, Form, Input, message, Modal, Select, Space, Spin, theme } from "antd";
 import { use } from "echarts/types/src/extension.js";
+import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "umi";
 
@@ -125,21 +127,31 @@ const ContestPage = () => {
 const ContestInfoModal = (props: { open: boolean, onClose: () => void }) => {
 
   const [form] = Form.useForm();
-  const hasValue = useMemo(() => !!form.getFieldValue('contest_id'), [form.getFieldValue('contest_id')]);
+  const [flag, setFlag] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [tip, setTip] = useState('');
 
+  const reset = () => {
+    form.resetFields();
+    setFlag(false);
+    setTip('');
+  }
+
   const submit = (values: any) => {
     setLoading(true);
     console.log('Received values:', values);
-    if (!hasValue) {
+    if (!flag) {
       setTip('正在获取赛事信息，请稍候...');
       // console.log('Received values:', values);
       fetchContestInfo({ contest_id: values.contest_short_id })
         .then((res) => {
-          form.resetFields();
-          form.setFieldsValue(res.data);
+          form.setFieldsValue({
+            ...res.data,
+            start_time: moment(res.data.start_time * 1000),
+            finish_time: moment(res.data.finish_time * 1000),
+          });
+          setFlag(true);
           setTip('');
         })
         .catch((error) => {
@@ -150,11 +162,15 @@ const ContestInfoModal = (props: { open: boolean, onClose: () => void }) => {
         });
     } else {
       setTip('正在添加赛事，请稍候...');
-      addOrUpdateContest(values)
+      addOrUpdateContest({
+        ...values,
+        start_time: Math.floor(values.start_time.valueOf() / 1000),
+        finish_time: Math.floor(values.finish_time.valueOf() / 1000),
+      })
         .then((res) => {
           props.onClose();
           Modal.success({ title: '添加赛事成功', content: '请在赛事列表中查看新添加的赛事' });
-          form.resetFields();
+          reset();
         })
         .catch((error) => {
           setTip('添加赛事失败，请稍后重试');
@@ -189,11 +205,11 @@ const ContestInfoModal = (props: { open: boolean, onClose: () => void }) => {
           name="contest_short_id"
           rules={[{ len: 6, message: '请输入6位赛事号!' }]}
         >
-          <Input maxLength={6} disabled={loading || hasValue} />
+          <Input maxLength={6} disabled={loading || flag} />
         </Form.Item>
 
         {
-          hasValue && (
+          flag && (
             <>
               <Form.Item label="赛事ID" name="contest_id">
                 <Input disabled />
@@ -208,23 +224,35 @@ const ContestInfoModal = (props: { open: boolean, onClose: () => void }) => {
               </Form.Item>
 
               <Form.Item label="开始时间" name="start_time">
-                <Input disabled />
+                <DatePicker disabled />
               </Form.Item>
 
               <Form.Item label="结束时间" name="finish_time">
-                <Input disabled />
+                <DatePicker disabled />
               </Form.Item>
 
               <Form.Item label="比赛模式" name="game_mode">
-                <Input disabled />
+                <Select
+                  disabled
+                  options={Object.entries(gameModeMap).map(([key, value]) => ({
+                    label: value,
+                    value: Number(key),
+                  }))}
+                />
               </Form.Item>
 
               <Form.Item label="计分规则" name="rule">
-                <Input disabled />
+                <Select
+                  disabled
+                  options={Object.entries(ruleMap).map(([key, value]) => ({
+                    label: value,
+                    value: Number(key),
+                  }))}
+                />
               </Form.Item>
 
               <Form.Item label="比赛描述" name="description">
-                <Input disabled />
+                <Input.TextArea disabled />
               </Form.Item>
 
               <Form.Item label="比赛性质" name="game_property" initialValue={0}>
@@ -250,9 +278,9 @@ const ContestInfoModal = (props: { open: boolean, onClose: () => void }) => {
 
         <Space style={{ display: 'flex', justifyContent: 'center' }}>
           <Button type="primary" htmlType="submit" loading={loading}>
-            {hasValue ? '确认添加赛事' : '获取赛事信息'}
+            {flag ? '确认添加赛事' : '获取赛事信息'}
           </Button>
-          <Button disabled={loading} onClick={() => form.resetFields()}>
+          <Button disabled={loading} onClick={reset}>
             重置
           </Button>
           {tip && <span style={{ color: 'red' }}>{tip}</span>}
